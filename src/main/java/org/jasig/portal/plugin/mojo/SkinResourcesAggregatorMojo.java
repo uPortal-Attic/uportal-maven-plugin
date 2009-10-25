@@ -14,7 +14,12 @@ import org.jasig.portal.web.skin.IResourcesAggregator;
 import org.jasig.portal.web.skin.ResourcesAggregatorImpl;
 
 /**
- * @author Nicholas Blair, nblair@doit.wisc.edu
+ * Maven {@link AbstractMojo} to invoke {@link IResourcesAggregator#aggregate(File, File)}.
+ * 
+ * You must specify the skinConfigurationFile property, points to the "skin.xml"
+ * file you wish to aggregate.
+ * 
+ * @author Nicholas Blair, npblair@wisc.edu
  *
  */
 public class SkinResourcesAggregatorMojo extends AbstractMojo {
