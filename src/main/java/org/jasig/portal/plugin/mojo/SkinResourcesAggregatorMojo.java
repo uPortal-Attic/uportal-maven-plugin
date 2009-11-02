@@ -18,7 +18,8 @@ import org.jasig.portal.web.skin.ResourcesAggregatorImpl;
  * 
  * You must specify the skinConfigurationFile property, points to the "skin.xml"
  * file you wish to aggregate.
- * 
+ *
+ * @goal aggregate
  * @author Nicholas Blair, npblair@wisc.edu
  *
  */
@@ -40,7 +41,7 @@ public class SkinResourcesAggregatorMojo extends AbstractMojo {
 	 */
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		try {
-			IResourcesAggregator aggr = new ResourcesAggregatorImpl();
+			ResourcesAggregatorImpl aggr = new ResourcesAggregatorImpl();
 			aggr.aggregate(skinConfigurationFile, outputRootDirectory);
 			
 		} catch (AggregationException e) {
