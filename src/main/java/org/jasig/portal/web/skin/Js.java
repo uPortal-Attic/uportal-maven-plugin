@@ -27,7 +27,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 @XmlType(name = "", propOrder = {
     "value"
 })
-@XmlRootElement(name = "js")
+@XmlRootElement(name = "js", namespace = "http://www.jasig.org/uportal/web/skin")
 public class Js {
 
 	@XmlValue

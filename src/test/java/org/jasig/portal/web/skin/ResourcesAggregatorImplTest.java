@@ -82,7 +82,7 @@ public class ResourcesAggregatorImplTest {
 
 		// there should only be one output file - the skin-aggr.xml 
 		Assert.assertEquals(1, outputDirectory.list().length);
-		Assert.assertEquals("skin-aggr.xml", outputDirectory.list()[0]);
+		Assert.assertEquals("uportal3_aggr.skin.xml", outputDirectory.list()[0]);
 	}
 	
 	@Test

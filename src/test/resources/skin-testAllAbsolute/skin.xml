@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<resources xmlns="http://www.jasig.org/uportal/web/skin">
+<skin:resources xmlns:skin="http://www.jasig.org/uportal/web/skin">
     <css>/a.css</css>
     <css>/b.css</css>
     <js>/a.js</js>
     <js>/b.js</js>
-</resources>
+</skin:resources>

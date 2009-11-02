@@ -51,5 +51,14 @@ public class ObjectFactory {
     public Css createCss() {
         return new Css();
     }
+    
+    /**
+     * Create an instance of {@link Js}
+     * 
+     * @return
+     */
+    public Js createJs() {
+    	return new Js();
+    }
 
 }

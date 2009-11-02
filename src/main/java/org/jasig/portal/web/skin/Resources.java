@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlType;
     "css",
     "js"
 })
-@XmlRootElement(name = "resources")
+@XmlRootElement(name = "resources", namespace = "http://www.jasig.org/uportal/web/skin")
 public class Resources {
 
     private List<Css> css;

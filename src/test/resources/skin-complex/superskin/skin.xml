@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<resources xmlns="http://www.jasig.org/uportal/web/skin">
+<skin:resources xmlns:skin="http://www.jasig.org/uportal/web/skin">
 
     <!-- these 2 will aggregate -->
 	<css>../common/css/a.css</css>
@@ -23,4 +23,4 @@
 	<js>js/a.js</js>
 	<js>js/b.js</js>
 
-</resources>
+</skin:resources>

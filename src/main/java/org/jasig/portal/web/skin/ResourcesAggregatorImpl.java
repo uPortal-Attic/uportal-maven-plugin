@@ -160,7 +160,7 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 	 * similar to the resourcesXml.
 	 * Example:
 	 * 
-	 * resourcesXml filename: skin.xml; output filename: skin-aggr.xml
+	 * resourcesXml filename: skin.xml; output filename: uportal3_aggr.skin.xml
 	 * 
 	 * @see org.jasig.portal.web.skin.IResourcesAggregator#aggregate(java.io.File, java.io.File)
 	 * @throws IllegalArgumentException if outputBaseDirectory (2nd file argument) is not a writable directory
@@ -192,7 +192,7 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 				} else {
 					// doesn't match criteria
 					// generate new single Css from currentAggregateList
-					Css aggregate = aggregateList(currentCssAggregateList, aggregateIndex++, resourcesParentDir, outputBaseDirectory);
+					Css aggregate = aggregateCssList(currentCssAggregateList, aggregateIndex++, resourcesParentDir, outputBaseDirectory);
 					// push result to cssResult
 					cssResult.add(aggregate);
 
@@ -205,7 +205,7 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 			}
 		}
 		// flush the currentAggregateList
-		Css lastCssAggregate = aggregateList(currentCssAggregateList, aggregateIndex++, resourcesParentDir, outputBaseDirectory);
+		Css lastCssAggregate = aggregateCssList(currentCssAggregateList, aggregateIndex++, resourcesParentDir, outputBaseDirectory);
 		if(null != lastCssAggregate) {
 			cssResult.add(lastCssAggregate);
 		}
@@ -225,7 +225,7 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 				} else {
 					// doesn't match criteria
 					// generate new single Js from currentAggregateList
-					Js aggregate = aggregateList(currentJsAggregateList, aggregateIndex++, resourcesParentDir, outputBaseDirectory);
+					Js aggregate = aggregateJsList(currentJsAggregateList, aggregateIndex++, resourcesParentDir, outputBaseDirectory);
 					// push result to cssResult
 					jsResult.add(aggregate);
 
@@ -238,7 +238,7 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 			}
 		}
 		// flush the js aggregatelist
-		Js lastJsAggregate = aggregateList(currentJsAggregateList, aggregateIndex++, resourcesParentDir, outputBaseDirectory);
+		Js lastJsAggregate = aggregateJsList(currentJsAggregateList, aggregateIndex++, resourcesParentDir, outputBaseDirectory);
 		if(null != lastJsAggregate) {
 			jsResult.add(lastJsAggregate);
 		}
@@ -249,9 +249,10 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 		aggregatedForm.getJs().addAll(jsResult);
 		
 		// dump aggregated form out to output directory
-		StringBuilder aggregatedFormOutputFileName = new StringBuilder(resourcesXmlBaseName);
-		aggregatedFormOutputFileName.append("-aggr.");
-		aggregatedFormOutputFileName.append(FilenameUtils.getExtension(resourcesXml.getName()));
+		//StringBuilder aggregatedFormOutputFileName = new StringBuilder(resourcesXmlBaseName);
+		StringBuilder aggregatedFormOutputFileName = new StringBuilder(AGGREGATE_FILE_PREFIX);
+		aggregatedFormOutputFileName.append(".").append(resourcesXmlBaseName);
+		aggregatedFormOutputFileName.append(".").append(FilenameUtils.getExtension(resourcesXml.getName()));
 		File aggregatedOutputFile = new File(outputBaseDirectory, aggregatedFormOutputFileName.toString());
 		writeResourcesXmlToFile(aggregatedForm, aggregatedOutputFile);
 		
@@ -306,7 +307,7 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 	 * @return 
 	 * @throws IOException 
 	 */
-	protected Css aggregateList(final List<Css> elements, final int aggregateIndex, final File skinDirectory, final File outputRoot) throws IOException {
+	protected Css aggregateCssList(final List<Css> elements, final int aggregateIndex, final File skinDirectory, final File outputRoot) throws IOException {
 		if(null == elements || elements.size() == 0) {
 			return null;
 		}
@@ -383,7 +384,7 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 	 * @return
 	 * @throws IOException 
 	 */
-	protected Js aggregateList(final List<Js> elements, final int aggregateIndex, final File skinDirectory, final File outputRoot) throws IOException {
+	protected Js aggregateJsList(final List<Js> elements, final int aggregateIndex, final File skinDirectory, final File outputRoot) throws IOException {
 		if(null == elements || elements.size() == 0) {
 			return null;
 		}

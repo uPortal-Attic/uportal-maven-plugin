@@ -79,7 +79,7 @@ public class JAXBTest {
 		JAXBContext context = JAXBContext.newInstance("org.jasig.portal.web.skin");
 		Unmarshaller u = context.createUnmarshaller();
 		Resources config = (Resources) u.unmarshal(
-				new StringReader("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><resources xmlns=\"http://www.jasig.org/uportal/web/skin\"><css media=\"screen\">/path/to/some/stylesheet.css</css><js>/path/to/some/javascript.js</js></resources>"));
+				new StringReader("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ns2:resources xmlns:ns2=\"http://www.jasig.org/uportal/web/skin\"><css media=\"screen\">/path/to/some/stylesheet.css</css><js>/path/to/some/javascript.js</js></ns2:resources>"));
 	
 		Assert.assertNotNull(config);
 		Assert.assertNotNull(config.getJs());
@@ -135,7 +135,7 @@ public class JAXBTest {
 		JAXBContext context = JAXBContext.newInstance("org.jasig.portal.web.skin");
 		Unmarshaller u = context.createUnmarshaller();
 		Resources config = (Resources) u.unmarshal(
-				new StringReader("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><resources xmlns=\"http://www.jasig.org/uportal/web/skin\"><css conditional=\"if IE lt 7\">ie6hack.css</css></resources>"));
+				new StringReader("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ns2:resources xmlns:ns2=\"http://www.jasig.org/uportal/web/skin\"><css conditional=\"if IE lt 7\">ie6hack.css</css></ns2:resources>"));
 	
 		Assert.assertNotNull(config);
 		Assert.assertNotNull(config.getJs());
@@ -157,7 +157,7 @@ public class JAXBTest {
 		JAXBContext context = JAXBContext.newInstance("org.jasig.portal.web.skin");
 		Unmarshaller u = context.createUnmarshaller();
 		Resources config = (Resources) u.unmarshal(
-				new StringReader("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><resources xmlns=\"http://www.jasig.org/uportal/web/skin\"><js conditional=\"if IE lt 7\">ie6hack.js</js></resources>"));
+				new StringReader("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ns2:resources xmlns:ns2=\"http://www.jasig.org/uportal/web/skin\"><js conditional=\"if IE lt 7\">ie6hack.js</js></ns2:resources>"));
 	
 		Assert.assertNotNull(config);
 		Assert.assertNotNull(config.getJs());
@@ -180,7 +180,7 @@ public class JAXBTest {
 		JAXBContext context = JAXBContext.newInstance("org.jasig.portal.web.skin");
 		Unmarshaller u = context.createUnmarshaller();
 		Resources config = (Resources) u.unmarshal(
-				new StringReader("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><resources xmlns=\"http://www.jasig.org/uportal/web/skin\">" +
+				new StringReader("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ns2:resources xmlns:ns2=\"http://www.jasig.org/uportal/web/skin\">" +
 						"<css>/path/to/some/stylesheet1.css</css>" +
 						"<css>/path/to/some/stylesheet2.css</css>" +
 						"<css>/path/to/some/stylesheet3.css</css>" +
@@ -193,7 +193,7 @@ public class JAXBTest {
 						"<js>/path/to/some/javascript4.js</js>" + 
 						"<js>/path/to/some/javascript5.js</js>" + 
 						"<js>/path/to/some/javascript6.js</js>" +
-						"</resources>"
+						"</ns2:resources>"
 				));
 		
 		Assert.assertNotNull(config);
