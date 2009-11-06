@@ -31,14 +31,13 @@ public class ResourcesAggregatorImplTest {
 		Assert.assertTrue(skinXml.exists());
 
 		ResourcesAggregatorImpl impl = new ResourcesAggregatorImpl();
-		impl.setCompressJavascript(true);
 		Resources result = impl.aggregate(skinXml, outputDirectory);
 		Assert.assertEquals(1, result.getCss().size());
 		Assert.assertEquals(1, result.getJs().size());
 		Css aggrCss = result.getCss().get(0);
-		Assert.assertEquals("uportal3_aggr1_3FDD520BF7388F993B7AEE120421C795.css", aggrCss.getValue());
+		Assert.assertTrue(aggrCss.getValue().startsWith("uportal3_aggr1"));
 		Js aggrJs = result.getJs().get(0);
-		Assert.assertEquals("uportal3_aggr2_C3C00ED7A86C70710A5BFD75A28980FA.js", aggrJs.getValue());
+		Assert.assertTrue(aggrJs.getValue().startsWith("uportal3_aggr2"));
 
 		File outputCss = new File(outputDirectory, aggrCss.getValue());
 		Assert.assertTrue(outputCss.exists());
@@ -51,8 +50,6 @@ public class ResourcesAggregatorImplTest {
 		
 		File outputJs = new File(outputDirectory, aggrJs.getValue());
 		Assert.assertTrue(outputJs.exists());
-		String outputJsContent = FileUtils.readFileToString(outputJs);
-		Assert.assertEquals("", outputJsContent);
 	}
 
 	/**
@@ -85,6 +82,10 @@ public class ResourcesAggregatorImplTest {
 		Assert.assertEquals("uportal3_aggr.skin.xml", outputDirectory.list()[0]);
 	}
 	
+	/**
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	public void testComplex() throws Exception {
 		String tempPath = getTestOutputRoot() + "/skin-complex/superskin";
@@ -119,7 +120,7 @@ public class ResourcesAggregatorImplTest {
 		Assert.assertTrue(result.getCss().get(4).getValue().contains("uportal3_aggr"));
 		Assert.assertEquals("alternate", result.getCss().get(4).getMedia());
 		
-		Assert.assertEquals(3, result.getJs().size());
+		Assert.assertEquals(4, result.getJs().size());
 		// 1st aggregated
 		Assert.assertTrue(result.getJs().get(0).getValue().startsWith("../common/js/"));
 		Assert.assertTrue(result.getJs().get(0).getValue().contains("uportal3_aggr"));
@@ -129,6 +130,9 @@ public class ResourcesAggregatorImplTest {
 		// 3rd aggregated with conditional
 		Assert.assertTrue(result.getJs().get(2).getValue().startsWith("js/"));
 		Assert.assertTrue(result.getJs().get(2).getValue().contains("uportal3_aggr"));
+		// 4th is compressed
+		Assert.assertTrue(result.getJs().get(3).getValue().contains("js/c-compressed.js"));
+		Assert.assertTrue(result.getJs().get(3).isCompressed());
 	}
 	
 

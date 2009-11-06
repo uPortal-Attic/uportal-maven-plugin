@@ -34,6 +34,8 @@ public class Js {
     private String value;
     @XmlAttribute
     private String conditional;
+    @XmlAttribute
+    private boolean compressed = false;
 	/**
 	 * @return the value
 	 */
@@ -58,8 +60,20 @@ public class Js {
 	public void setConditional(String conditional) {
 		this.conditional = conditional;
 	}
-    
 	 /**
+	 * @return whether this instance is already "compressed"
+	 */
+	public boolean isCompressed() {
+		return compressed;
+	}
+	/**
+	 * @param compressed the minified to set
+	 */
+	public void setCompressed(boolean compressed) {
+		this.compressed = compressed;
+	}
+	
+	/**
      * 
      * @return
      */
@@ -86,6 +100,7 @@ public class Js {
 		Js rhs = (Js) obj;
 		EqualsBuilder builder = new EqualsBuilder();
 		builder.append(this.conditional, rhs.conditional);
+		builder.append(this.compressed, rhs.compressed);
 		builder.append(this.value, rhs.value);
 		return builder.isEquals();
 	}
@@ -96,6 +111,7 @@ public class Js {
 	public int hashCode() {
 		HashCodeBuilder builder = new HashCodeBuilder();
 		builder.append(this.conditional);
+		builder.append(this.compressed);
 		builder.append(this.value);
 		return builder.toHashCode();
 	}
@@ -106,6 +122,7 @@ public class Js {
 	 * 
 	 * 2 {@link Js} objects are aggregatable if and only if:
 	 * <ol>
+	 * <li>Neither object returns true for {@link #isCompressed()}</li>
 	 * <li>Neither object returns true for {@link #isAbsolute()}</li>
 	 * <li>The values of their "conditional" properties are equivalent</li>
 	 * <li>The "paths" of their values are equivalent</li>
@@ -120,6 +137,10 @@ public class Js {
 	 */
     public boolean willAggregateWith(final Js other) {
     	Validate.notNull(other, "Js cannot be null");
+    	// never aggregate compressed
+    	if(this.isCompressed() || other.isCompressed()) {
+    		return false;
+    	}
     	// never aggregate absolutes
     	if(this.isAbsolute() || other.isAbsolute()) {
     		return false;

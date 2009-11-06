@@ -85,6 +85,28 @@ public class JsTest {
 		Assert.assertTrue(j2.willAggregateWith(j1));
 	}
 	
+	@Test
+	public void testWillAggregateWithCompressed() throws Exception {
+		Js j1 = new Js();
+		Js j2 = new Js();
+		
+		j1.setValue("subdirectory/1.js");
+		j1.setCompressed(true);
+		j2.setValue("subdirectory/2.js");
+		Assert.assertFalse(j1.willAggregateWith(j2));
+		Assert.assertFalse(j2.willAggregateWith(j1));
+		j2.setCompressed(true);
+		Assert.assertFalse(j1.willAggregateWith(j2));
+		Assert.assertFalse(j2.willAggregateWith(j1));
+
+		
+		// set both not compressed, should aggregate
+		j1.setCompressed(false);
+		j2.setCompressed(false);
+		Assert.assertTrue(j1.willAggregateWith(j2));
+		Assert.assertTrue(j2.willAggregateWith(j1));
+	}
+	
 	
 	@Test
 	public void testIsConditional() throws Exception {

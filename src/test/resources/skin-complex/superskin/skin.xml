@@ -22,5 +22,7 @@
 	<js>/universal.js</js>
 	<js>js/a.js</js>
 	<js>js/b.js</js>
+	<!-- compressed won't get aggregated -->
+	<js compressed="true">js/c-compressed.js</js>
 
 </skin:resources>

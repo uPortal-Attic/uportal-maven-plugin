@@ -1,3 +1,4 @@
-//var saygoodbye = function() {
-//window.alert('Goodbye!');
-//};
+function goodbye(name) {
+  alert('Goodbye, ' + name);
+}
+goodbye('Veteran user');

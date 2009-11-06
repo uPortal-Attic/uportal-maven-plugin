@@ -124,6 +124,21 @@ public class JAXBTest {
 		m.marshal(config, System.out);
 		System.out.println();
 	}
+	/**
+	 * Marshal an basic skinConfiguration to System.out, test passes if no exception thrown.
+	 */
+	@Test
+	public void testMarshalJsCompressed() throws Exception {
+		Resources config = new Resources();
+		Js css = new Js();
+		css.setValue("/path/to/some/javascript.js");
+		css.setCompressed(true);
+		config.getJs().add(css);
+		JAXBContext context = JAXBContext.newInstance("org.jasig.portal.web.skin");
+		Marshaller m = context.createMarshaller();
+		m.marshal(config, System.out);
+		System.out.println();
+	}
 	
 	/**
 	 * Unmarshal a resources containing a CSS with the conditional attribute
@@ -167,6 +182,29 @@ public class JAXBTest {
 
 		Assert.assertEquals("ie6hack.js", config.getJs().get(0).getValue());
 		Assert.assertEquals("if IE lt 7", config.getJs().get(0).getConditional());
+		Assert.assertFalse(config.getJs().get(0).isCompressed());
+	}
+	/**
+	 * Unmarshal a resources containing a Js with the compressed attribute
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testUnmarshalJsCompressed() throws Exception {
+		JAXBContext context = JAXBContext.newInstance("org.jasig.portal.web.skin");
+		Unmarshaller u = context.createUnmarshaller();
+		Resources config = (Resources) u.unmarshal(
+				new StringReader("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ns2:resources xmlns:ns2=\"http://www.jasig.org/uportal/web/skin\"><js compressed=\"true\">ie6hack.js</js></ns2:resources>"));
+	
+		Assert.assertNotNull(config);
+		Assert.assertNotNull(config.getJs());
+		Assert.assertNotNull(config.getCss());
+		Assert.assertEquals(1, config.getJs().size());
+		Assert.assertEquals(0, config.getCss().size());
+
+		Assert.assertEquals("ie6hack.js", config.getJs().get(0).getValue());
+		Assert.assertFalse(config.getJs().get(0).isConditional());
+		Assert.assertTrue(config.getJs().get(0).isCompressed());
 	}
 	
 	/**

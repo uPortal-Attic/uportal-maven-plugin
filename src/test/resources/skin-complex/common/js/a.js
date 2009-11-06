@@ -1,3 +1,4 @@
-//var sayhello = function() {
-//window.alert('Hello!');
-//};
+function hello(name) {
+  alert('Hello, ' + name);
+}
+hello('New user');

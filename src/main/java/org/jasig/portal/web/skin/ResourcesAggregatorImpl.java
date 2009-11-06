@@ -48,11 +48,10 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 	private int cssLineBreakColumnNumber = 0;
 	private int jsLineBreakColumnNumber = 0;
 
-	private boolean compressJavascript = false;
-	private boolean obfuscateJs = false;
+	private boolean obfuscateJs = true;
 	private boolean displayJsWarnings = true;
-	private boolean preserveAllSemiColons = false;
-	private boolean disableJsOptimizations = false;
+	private boolean preserveAllSemiColons = true;
+	private boolean disableJsOptimizations = true;
 
 	/**
 	 * @return the cssLineBreakColumnNumber
@@ -66,20 +65,6 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 	 */
 	public void setCssLineBreakColumnNumber(int cssLineBreakColumnNumber) {
 		this.cssLineBreakColumnNumber = cssLineBreakColumnNumber;
-	}
-
-	/**
-	 * @return the compressJavascript
-	 */
-	public boolean isCompressJavascript() {
-		return compressJavascript;
-	}
-
-	/**
-	 * @param compressJavascript the compressJavascript to set
-	 */
-	public void setCompressJavascript(boolean compressJavascript) {
-		this.compressJavascript = compressJavascript;
 	}
 
 	/**
@@ -168,7 +153,7 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 	public Resources aggregate(File resourcesXml,
 			File outputBaseDirectory) throws IOException, AggregationException {
 		if(null == outputBaseDirectory || !outputBaseDirectory.isDirectory() || !outputBaseDirectory.canWrite()) {
-			throw new IllegalArgumentException("second file argument (outputBaseDirectory) must be a directory AND writable");
+			throw new IllegalArgumentException("outputBaseDirectory ("+ (null == outputBaseDirectory ? null : outputBaseDirectory.getAbsolutePath()) + ") must be a directory AND writable");
 		}
 		
 		// parse the resourcesXml input
@@ -391,7 +376,7 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 
 		final Js headElement = elements.get(0);
 
-		if(elements.size() == 1 && headElement.isAbsolute()) {
+		if(elements.size() == 1 && (headElement.isAbsolute() || headElement.isCompressed())) {
 			return headElement;
 		}
 
@@ -425,7 +410,8 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 		File aggregateOutputFile = new File(jsDirectoryInOutputRoot, newFileName);
 		aggregateOutputFile.delete();
 
-		if(compressJavascript) {
+		// only compress if not already marked as compressed
+		if(!headElement.isCompressed()) {
 			// new FileWriter to the aggregate output file for JavaScript compressor
 
 			FileWriter compressWriter = new FileWriter(aggregateOutputFile);
@@ -450,6 +436,7 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 		Js result = new Js();
 		result.setValue(newResultValue.toString());
 		result.setConditional(headElement.getConditional());
+		result.setCompressed(headElement.isCompressed());
 		return result;
 	}
 
