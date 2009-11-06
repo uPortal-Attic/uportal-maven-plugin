@@ -32,7 +32,8 @@ public class SkinResourcesAggregatorMojo extends AbstractMojo {
 	private File skinConfigurationFile;
 	
 	/**
-	 * @parameter expression ${project.build.outputDirectory}
+	 * @parameter
+	 * @required
 	 */
 	private File outputRootDirectory;
 
