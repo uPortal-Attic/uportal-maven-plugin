@@ -45,8 +45,8 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 	private final static String JS = ".js";
 	protected final static String AGGREGATE_FILE_PREFIX = "uportal3_aggr";
 
-	private int cssLineBreakColumnNumber = 0;
-	private int jsLineBreakColumnNumber = 0;
+	private int cssLineBreakColumnNumber = 10000;
+	private int jsLineBreakColumnNumber = 10000;
 
 	private boolean obfuscateJs = true;
 	private boolean displayJsWarnings = true;
