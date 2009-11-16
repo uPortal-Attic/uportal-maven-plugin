@@ -139,7 +139,8 @@ public class ResourcesAggregatorImplTest {
 	@After
 	public void cleanupTempDir() throws Exception {
 		File testOutputDirectory = new File(getTestOutputRoot());
-		FileUtils.forceDelete(testOutputDirectory);
+		FileUtils.cleanDirectory(testOutputDirectory);
+		FileUtils.deleteDirectory(testOutputDirectory);
 	}
 
 	/**
