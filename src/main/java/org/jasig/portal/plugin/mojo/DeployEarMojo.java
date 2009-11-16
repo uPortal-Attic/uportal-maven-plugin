@@ -178,10 +178,10 @@ public class DeployEarMojo extends AbstractTomcatMojo {
 	        config.setEarLocation(artifactFile);
 		} catch (ArtifactResolutionException ex) {
 			getLog().error("Failed to resolve artifact", ex);
-			return;
+			throw new MojoFailureException("Failed to resolve artifact "+artifact);			
 		} catch (ArtifactNotFoundException ex) {
-			getLog().error("Failed to resolve artifact", ex);
-			return;
+			getLog().error("Failed to find artifact", ex);
+			throw new MojoFailureException("Failed to find artifact "+artifact);  
 		}
 
         config.setExtractWars(this.isExtractWars());

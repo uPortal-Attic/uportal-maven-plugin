@@ -150,19 +150,19 @@ public class DeployWarMojo extends AbstractTomcatWarDeployerMojo {
 	        
 		} catch (ArtifactResolutionException ex) {
 			getLog().error("Failed to resolve artifact", ex);
-			return;
+            throw new MojoFailureException("Failed to resolve artifact "+artifact);  
 		} catch (ArtifactNotFoundException ex) {
-			getLog().error("Failed to resolve artifact", ex);
-			return;
+			getLog().error("Failed to find artifact", ex);
+	         throw new MojoFailureException("Failed to find artifact "+artifact);  
 		} catch (IOException ex) {
 			getLog().error("Failed to deploy artifact", ex);
-			return;
+            throw new MojoFailureException("Failed to deploy artifact "+artifact);  
 		} catch (NoSuchArchiverException ex) {
 			getLog().error("Failed to unpack artifact", ex);
-			return;
+            throw new MojoFailureException("Failed to find artifact "+artifact);  
 		} catch (ArchiverException ex) {
 			getLog().error("Failed to unpack artifact", ex);
-			return;
+            throw new MojoFailureException("Failed to unpack artifact "+artifact);  
 		}
 
 	}

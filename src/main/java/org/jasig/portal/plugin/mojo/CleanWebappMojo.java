@@ -30,6 +30,7 @@ public class CleanWebappMojo extends AbstractTomcatMojo {
 				FileUtils.deleteDirectory(contextDir);
 			} catch (IOException ex) {
 				getLog().error("Unable to delete directory for context " + contextName, ex);
+	            throw new MojoFailureException("Failed to delete directory for context " + contextName);  				
 			}
         }
 	}
