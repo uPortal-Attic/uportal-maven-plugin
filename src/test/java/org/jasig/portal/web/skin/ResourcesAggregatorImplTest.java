@@ -144,17 +144,14 @@ public class ResourcesAggregatorImplTest {
 
 	/**
 	 * Shortcut to get a temporary directory underneath java.io.tmpdir.
-	 * Includes special handling for Mac OS X JVM.
 	 * 
 	 * @return
 	 */
 	private String getTestOutputRoot() {
 		String tempPath = System.getProperty("java.io.tmpdir");
-		// Mac JVM java.io.tmpdir is odd, replace it with /tmp
-		if (tempPath.startsWith("/var/folders/")) {
-			tempPath = "/tmp/";
+		if(!tempPath.endsWith("/")) {
+			tempPath += "/";
 		}
-
 		tempPath = tempPath + "resources-aggregator-impl-test-output";
 		return tempPath;
 	}
