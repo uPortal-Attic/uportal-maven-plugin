@@ -18,6 +18,11 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<url>${jasig-site-base}/maven-uportal-plugin/${project.version}</url>
 
+    <scm>
+        <developerConnection>scm:svn:https://www.ja-sig.org/svn/sandbox/maven-uportal-plugin/trunk</developerConnection>
+        <url>http://developer.jasig.org/source/browse/jasigsvn/sandbox/maven-uportal-plugin/trunk</url>
+    </scm>
+    
 	<repositories>
 		<repository>
 			<id>jasig-m2</id>
