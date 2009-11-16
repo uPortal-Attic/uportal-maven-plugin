@@ -19,6 +19,7 @@
 	<url>${jasig-site-base}/maven-uportal-plugin/${project.version}</url>
 
     <scm>
+        <connection>scm:svn:https://www.ja-sig.org/svn/sandbox/maven-uportal-plugin/trunk</connection>
         <developerConnection>scm:svn:https://www.ja-sig.org/svn/sandbox/maven-uportal-plugin/trunk</developerConnection>
         <url>http://developer.jasig.org/source/browse/jasigsvn/sandbox/maven-uportal-plugin/trunk</url>
     </scm>
