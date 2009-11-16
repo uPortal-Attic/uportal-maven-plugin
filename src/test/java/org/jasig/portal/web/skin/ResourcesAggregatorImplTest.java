@@ -42,11 +42,7 @@ public class ResourcesAggregatorImplTest {
 		File outputCss = new File(outputDirectory, aggrCss.getValue());
 		Assert.assertTrue(outputCss.exists());
 		String outputCssContent = FileUtils.readFileToString(outputCss);
-		StringBuilder expected = new StringBuilder();
-		expected.append(".selector{color:red;}");
-		expected.append(System.getProperty("line.separator"));
-		expected.append(".otherselector{color:green;}");
-		Assert.assertEquals(expected.toString(), outputCssContent);
+		Assert.assertEquals(".selector{color:red;}.otherselector{color:green;}", outputCssContent);
 		
 		File outputJs = new File(outputDirectory, aggrJs.getValue());
 		Assert.assertTrue(outputJs.exists());
