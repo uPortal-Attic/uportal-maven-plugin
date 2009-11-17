@@ -336,9 +336,14 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 
 		// new FileWriter to the aggregate output file for Css compressor
 		FileWriter compressWriter = new FileWriter(aggregateOutputFile);
-		CssCompressor cssCompressor = new CssCompressor(new FileReader(tempFile));
-		cssCompressor.compress(compressWriter, cssLineBreakColumnNumber);
-		compressWriter.close();
+		FileReader tempFileReader = new FileReader(tempFile);
+		CssCompressor cssCompressor = new CssCompressor(tempFileReader);
+		try {
+			cssCompressor.compress(compressWriter, cssLineBreakColumnNumber);
+		} finally {
+			IOUtils.closeQuietly(tempFileReader);
+			IOUtils.closeQuietly(compressWriter);
+		}
 
 		// delete the temp file now that we've written compressed version
 		tempFile.delete();
@@ -415,9 +420,14 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 			// new FileWriter to the aggregate output file for JavaScript compressor
 
 			FileWriter compressWriter = new FileWriter(aggregateOutputFile);
-			JavaScriptCompressor jsCompressor = new JavaScriptCompressor(new FileReader(tempFile), new JavaScriptErrorReporterImpl());
-			jsCompressor.compress(compressWriter, jsLineBreakColumnNumber, obfuscateJs, displayJsWarnings, preserveAllSemiColons, disableJsOptimizations);
-			compressWriter.close();
+			FileReader tempFileReader = new FileReader(tempFile);
+			JavaScriptCompressor jsCompressor = new JavaScriptCompressor(tempFileReader, new JavaScriptErrorReporterImpl());
+			try {
+				jsCompressor.compress(compressWriter, jsLineBreakColumnNumber, obfuscateJs, displayJsWarnings, preserveAllSemiColons, disableJsOptimizations);
+			} finally {
+				IOUtils.closeQuietly(tempFileReader);
+				IOUtils.closeQuietly(compressWriter);
+			}
 
 			// delete the temp file now that we've written compressed version
 			tempFile.delete();
