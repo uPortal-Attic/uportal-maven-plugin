@@ -100,7 +100,6 @@
 		<commons-io.version>1.4</commons-io.version>
 		<junit.version>4.4</junit.version>
 		<yuicompressor.version>2.4.2</yuicompressor.version>
-		<rhino.version>1.6R7</rhino.version>
 		<commons-lang.version>2.4</commons-lang.version>
 	</properties>
 
@@ -113,6 +112,10 @@
 				<exclusion>
 					<groupId>org.springframework</groupId>
 					<artifactId>spring</artifactId>
+				</exclusion>
+				<exclusion>
+					<artifactId>js</artifactId>
+					<groupId>rhino</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -223,12 +226,13 @@
 			<groupId>com.yahoo.platform.yui</groupId>
 			<artifactId>yuicompressor</artifactId>
 			<version>${yuicompressor.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>js</artifactId>
+					<groupId>rhino</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-		<dependency>
-		    <groupId>rhino</groupId>
-		    <artifactId>js</artifactId>
-		    <version>${rhino.version}</version>
-		</dependency>	
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
