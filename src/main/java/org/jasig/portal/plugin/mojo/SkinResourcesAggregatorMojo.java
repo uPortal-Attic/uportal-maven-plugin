@@ -26,6 +26,31 @@ import org.jasig.portal.web.skin.ResourcesAggregatorImpl;
 public class SkinResourcesAggregatorMojo extends AbstractMojo {
 
 	/**
+	 * @parameter default-value="10000"
+	 */
+	private int cssLineBreakColumnNumber = 10000;
+	/**
+	 * @parameter default-value="false"
+	 */
+	private boolean disableJsOptimizations = false;
+	/**
+	 * @parameter default-value="true"
+	 */
+	private boolean displayJsWarnings = true;
+	/**
+	 * @parameter default-value="10000"
+	 */
+	private int jsLineBreakColumnNumber = 10000;
+	/**
+	 * @parameter default-value="true"
+	 */
+	private boolean obfuscateJs = true;
+	/**
+	 * @parameter default-value="true"
+	 */
+	private boolean preserveAllSemiColons = true;
+	
+	/**
 	 * @parameter 
 	 * @required
 	 */
@@ -43,6 +68,14 @@ public class SkinResourcesAggregatorMojo extends AbstractMojo {
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		try {
 			ResourcesAggregatorImpl aggr = new ResourcesAggregatorImpl();
+			
+			aggr.setCssLineBreakColumnNumber(cssLineBreakColumnNumber);
+			aggr.setDisableJsOptimizations(disableJsOptimizations);
+			aggr.setDisplayJsWarnings(displayJsWarnings);
+			aggr.setJsLineBreakColumnNumber(jsLineBreakColumnNumber);
+			aggr.setObfuscateJs(obfuscateJs);
+			aggr.setPreserveAllSemiColons(preserveAllSemiColons);
+			
 			aggr.aggregate(skinConfigurationFile, outputRootDirectory);
 			
 		} catch (AggregationException e) {
