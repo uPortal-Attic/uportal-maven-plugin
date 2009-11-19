@@ -14,13 +14,13 @@
 
 	<name>uPortal Maven Plugin</name>
 	<description>The root project definition for the uPortal project.</description>
-	<version>1.0.0-M2</version>
+	<version>1.0.0-M3-SNAPSHOT</version>
 	<url>${jasig-site-base}/maven-uportal-plugin/${project.version}</url>
 
     <scm>
-        <connection>scm:svn:https://www.ja-sig.org/svn/sandbox/maven-uportal-plugin/tags/rel-1.0.0-M2</connection>
-        <developerConnection>scm:svn:https://www.ja-sig.org/svn/sandbox/maven-uportal-plugin/tags/rel-1.0.0-M2</developerConnection>
-        <url>http://developer.jasig.org/source/browse/jasigsvn/sandbox/maven-uportal-plugin/tags/rel-1.0.0-M2</url>
+        <connection>scm:svn:https://www.ja-sig.org/svn/sandbox/maven-uportal-plugin/trunk</connection>
+        <developerConnection>scm:svn:https://www.ja-sig.org/svn/sandbox/maven-uportal-plugin/trunk</developerConnection>
+        <url>http://developer.jasig.org/source/browse/jasigsvn/sandbox/maven-uportal-plugin/trunk</url>
     </scm>
     
 	<repositories>
