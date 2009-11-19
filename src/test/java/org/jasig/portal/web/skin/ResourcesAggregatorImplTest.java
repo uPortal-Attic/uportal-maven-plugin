@@ -4,6 +4,7 @@
 package org.jasig.portal.web.skin;
 
 import java.io.File;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
@@ -131,6 +132,36 @@ public class ResourcesAggregatorImplTest {
 		Assert.assertTrue(result.getJs().get(3).isCompressed());
 	}
 	
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testUniversality() throws Exception {
+		String tempPath = getTestOutputRoot() + "/skin-universality/uportal3";
+		
+		File outputDirectory = new File(tempPath);
+		outputDirectory.mkdirs();
+		Assert.assertTrue(outputDirectory.exists());
+
+		File skinXml = new ClassPathResource("skin-universality/uportal3/skin.xml").getFile();
+		Assert.assertTrue(skinXml.exists());
+		
+		ResourcesAggregatorImpl impl = new ResourcesAggregatorImpl();
+		Resources result = impl.aggregate(skinXml, outputDirectory);
+		Assert.assertNotNull(result);
+		List<Css> cssList = result.getCss();
+		Assert.assertEquals(6, cssList.size());
+		List<Js> jsList = result.getJs();
+		Assert.assertEquals(1, jsList.size());
+		Assert.assertTrue(new File(getTestOutputRoot() + "/skin-universality/common/css/fluid/uportal3_aggr1_A3661D3474000B0B06BC01EA644DBE07.css").exists());
+		Assert.assertTrue(new File(getTestOutputRoot() + "/skin-universality/common/css/uportal3_aggr2_0A62110C5DBE25EECD978B41EE455466.css").exists());
+		Assert.assertTrue(new File(getTestOutputRoot() + "/skin-universality/common/css/uportal3_aggr2_0A62110C5DBE25EECD978B41EE455466.css").exists());
+		Assert.assertTrue(new File(getTestOutputRoot() + "/skin-universality/uportal3/uportal3_aggr3_3334333FF8A41D7D6BCE5C8AE5B71B4A.css").exists());
+		Assert.assertTrue(new File(getTestOutputRoot() + "/skin-universality/uportal3/uportal3_aggr5_0EC69539BB6BA6C8B611BAC539C67794.css").exists());
+		Assert.assertTrue(new File(getTestOutputRoot() + "/skin-universality/uportal3/uportal3_aggr6_F21DFDA90E2DFAEB81BC098A037A458C.css").exists());
+		Assert.assertTrue(new File(getTestOutputRoot() + "/skin-universality/common/javascript/uportal/uportal3_aggr7_158C92140AC7355300F2708F20D66DB2.js").exists());
+	}
 
 	/**
 	 * Delete our temp directory after test execution.
@@ -139,22 +170,20 @@ public class ResourcesAggregatorImplTest {
 	@After
 	public void cleanupTempDir() throws Exception {
 		File testOutputDirectory = new File(getTestOutputRoot());
-		FileUtils.forceDelete(testOutputDirectory);
+		FileUtils.cleanDirectory(testOutputDirectory);
+		FileUtils.deleteDirectory(testOutputDirectory);
 	}
 
 	/**
 	 * Shortcut to get a temporary directory underneath java.io.tmpdir.
-	 * Includes special handling for Mac OS X JVM.
 	 * 
 	 * @return
 	 */
 	private String getTestOutputRoot() {
 		String tempPath = System.getProperty("java.io.tmpdir");
-		// Mac JVM java.io.tmpdir is odd, replace it with /tmp
-		if (tempPath.startsWith("/var/folders/")) {
-			tempPath = "/tmp/";
+		if(!tempPath.endsWith("/")) {
+			tempPath += "/";
 		}
-
 		tempPath = tempPath + "resources-aggregator-impl-test-output";
 		return tempPath;
 	}
