@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mozilla.javascript.ErrorReporter;
@@ -51,7 +53,7 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 	private boolean obfuscateJs = true;
 	private boolean displayJsWarnings = true;
 	private boolean preserveAllSemiColons = true;
-	private boolean disableJsOptimizations = true;
+	private boolean disableJsOptimizations = false;
 
 	/**
 	 * @return the cssLineBreakColumnNumber
@@ -317,7 +319,7 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 			FileInputStream cssIn = new FileInputStream(cssFile);
 			try {
 				IOUtils.copy(cssIn, out);
-				out.write(System.getProperty("line.separator").charAt(0));
+				IOUtils.write(SystemUtils.LINE_SEPARATOR, out);
 			} finally {
 				IOUtils.closeQuietly(cssIn);
 			}
@@ -390,22 +392,59 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 		// create the same directory structure in the output root
 		jsDirectoryInOutputRoot.mkdirs();
 
-		// push all of the content from each css file into 1 temporary file.
+		// tempFile will store the aggregated output
 		File tempFile = new File(jsDirectoryInOutputRoot, AGGREGATE_FILE_PREFIX + aggregateIndex + "_temp" + JS);
 		FileOutputStream out = new FileOutputStream(tempFile);
+		
+		// pass each js file through the javascript compressor; output to original filename + suffix
 		for(Js js: elements) {
-			File jsFile = resolvePath(skinDirectory, js.getValue());
-			FileInputStream jsIn = new FileInputStream(jsFile);
-			try {
-				IOUtils.copy(jsIn, out);
-				out.write(System.getProperty("line.separator").charAt(0));
-			} finally {
-				IOUtils.closeQuietly(jsIn);
+			File originalJsFile = resolvePath(skinDirectory, js.getValue());
+			if(!js.isCompressed()) {
+				//FileReader originalJsFileReader = new FileReader(originalJsFile);
+				InputStreamReader originalJsFileReader = new InputStreamReader(new FileInputStream(originalJsFile));
+				File compressedJsFile = new File(jsDirectoryInOutputRoot, originalJsFile.getName() + ".tmp");
+				FileWriter compressWriter = new FileWriter(compressedJsFile);
+				JavaScriptCompressor jsCompressor = new JavaScriptCompressor(originalJsFileReader, new JavaScriptErrorReporterImpl());
+				try {
+					jsCompressor.compress(compressWriter, jsLineBreakColumnNumber, obfuscateJs, displayJsWarnings, preserveAllSemiColons, disableJsOptimizations);
+				} finally {
+					IOUtils.closeQuietly(originalJsFileReader);
+					IOUtils.closeQuietly(compressWriter);
+				}
+				// now copy the compressed output to the tempFile
+				FileInputStream jsIn = new FileInputStream(compressedJsFile);
+				try {
+					//IOUtils.write("//BEGIN " + compressedJsFile.getName(), out);
+					//IOUtils.write(SystemUtils.LINE_SEPARATOR, out);
+					IOUtils.copy(jsIn, out);
+					IOUtils.write(SystemUtils.LINE_SEPARATOR, out);
+					//IOUtils.write("//END " + compressedJsFile.getName(), out);
+					//IOUtils.write(SystemUtils.LINE_SEPARATOR, out);
+				} finally {
+					IOUtils.closeQuietly(jsIn);
+				}
+				
+				// finally delete the compressed
+				compressedJsFile.delete();
+			} else {
+				// just aggregate, copy the compressed output to the tempFile
+				FileInputStream jsIn = new FileInputStream(originalJsFile);
+				try {
+					//IOUtils.write("// BEGIN " + originalJsFile.getAbsolutePath(), out);
+					//IOUtils.write(SystemUtils.LINE_SEPARATOR, out);
+					IOUtils.copy(jsIn, out);
+					IOUtils.write(SystemUtils.LINE_SEPARATOR, out);
+					//IOUtils.write("// END " + originalJsFile.getAbsolutePath(), out);
+					//IOUtils.write(SystemUtils.LINE_SEPARATOR, out);
+				} finally {
+					IOUtils.closeQuietly(jsIn);
+				}
 			}
 		}
+		// close our aggregated tempFile
 		IOUtils.closeQuietly(out);
 
-		// temp file is created, get checksum before compression
+		// temp file is created, get checksum
 		final String checksum = checksum(tempFile);
 
 		// create a new file name
@@ -415,26 +454,8 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 		File aggregateOutputFile = new File(jsDirectoryInOutputRoot, newFileName);
 		aggregateOutputFile.delete();
 
-		// only compress if not already marked as compressed
-		if(!headElement.isCompressed()) {
-			// new FileWriter to the aggregate output file for JavaScript compressor
-
-			FileWriter compressWriter = new FileWriter(aggregateOutputFile);
-			FileReader tempFileReader = new FileReader(tempFile);
-			JavaScriptCompressor jsCompressor = new JavaScriptCompressor(tempFileReader, new JavaScriptErrorReporterImpl());
-			try {
-				jsCompressor.compress(compressWriter, jsLineBreakColumnNumber, obfuscateJs, displayJsWarnings, preserveAllSemiColons, disableJsOptimizations);
-			} finally {
-				IOUtils.closeQuietly(tempFileReader);
-				IOUtils.closeQuietly(compressWriter);
-			}
-
-			// delete the temp file now that we've written compressed version
-			tempFile.delete();
-		} else {
-			FileUtils.moveFile(tempFile, aggregateOutputFile);
-		}
-
+		FileUtils.moveFile(tempFile, aggregateOutputFile);
+		
 		StringBuilder newResultValue = new StringBuilder();
 		if(StringUtils.isNotBlank(jsElementRelativePath)) {
 			newResultValue.append(jsElementRelativePath);
