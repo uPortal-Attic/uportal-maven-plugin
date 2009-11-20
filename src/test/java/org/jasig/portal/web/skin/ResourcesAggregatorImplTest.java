@@ -7,7 +7,6 @@ import java.io.File;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
@@ -154,20 +153,20 @@ public class ResourcesAggregatorImplTest {
 		Assert.assertEquals(6, cssList.size());
 		List<Js> jsList = result.getJs();
 		Assert.assertEquals(1, jsList.size());
-		Assert.assertTrue(new File(getTestOutputRoot() + "/skin-universality/common/css/fluid/uportal3_aggr1_A3661D3474000B0B06BC01EA644DBE07.css").exists());
-		Assert.assertTrue(new File(getTestOutputRoot() + "/skin-universality/common/css/uportal3_aggr2_0A62110C5DBE25EECD978B41EE455466.css").exists());
-		Assert.assertTrue(new File(getTestOutputRoot() + "/skin-universality/common/css/uportal3_aggr2_0A62110C5DBE25EECD978B41EE455466.css").exists());
-		Assert.assertTrue(new File(getTestOutputRoot() + "/skin-universality/uportal3/uportal3_aggr3_3334333FF8A41D7D6BCE5C8AE5B71B4A.css").exists());
-		Assert.assertTrue(new File(getTestOutputRoot() + "/skin-universality/uportal3/uportal3_aggr5_0EC69539BB6BA6C8B611BAC539C67794.css").exists());
-		Assert.assertTrue(new File(getTestOutputRoot() + "/skin-universality/uportal3/uportal3_aggr6_F21DFDA90E2DFAEB81BC098A037A458C.css").exists());
-		Assert.assertTrue(new File(getTestOutputRoot() + "/skin-universality/common/javascript/uportal/uportal3_aggr7_158C92140AC7355300F2708F20D66DB2.js").exists());
+		Assert.assertTrue(new File(outputDirectory, cssList.get(0).getValue()).exists());
+		Assert.assertTrue(new File(outputDirectory, cssList.get(1).getValue()).exists());
+		Assert.assertTrue(new File(outputDirectory, cssList.get(2).getValue()).exists());
+		// index 3 is absolute
+		Assert.assertTrue(new File(outputDirectory, cssList.get(4).getValue()).exists());
+		Assert.assertTrue(new File(outputDirectory, cssList.get(5).getValue()).exists());
+		Assert.assertTrue(new File(outputDirectory, jsList.get(0).getValue()).exists());
 	}
 
 	/**
 	 * Delete our temp directory after test execution.
 	 * @throws Exception
 	 */
-	@After
+	//@After
 	public void cleanupTempDir() throws Exception {
 		File testOutputDirectory = new File(getTestOutputRoot());
 		FileUtils.cleanDirectory(testOutputDirectory);
