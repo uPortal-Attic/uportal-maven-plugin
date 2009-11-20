@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
@@ -166,7 +167,7 @@ public class ResourcesAggregatorImplTest {
 	 * Delete our temp directory after test execution.
 	 * @throws Exception
 	 */
-	//@After
+	@After
 	public void cleanupTempDir() throws Exception {
 		File testOutputDirectory = new File(getTestOutputRoot());
 		FileUtils.cleanDirectory(testOutputDirectory);
