@@ -36,9 +36,9 @@ public class ResourcesAggregatorImplTest {
 		Assert.assertEquals(1, result.getCss().size());
 		Assert.assertEquals(1, result.getJs().size());
 		Css aggrCss = result.getCss().get(0);
-		Assert.assertTrue(aggrCss.getValue().startsWith("uportal3_aggr1"));
+		Assert.assertTrue(aggrCss.getValue().startsWith("uportal3_1"));
 		Js aggrJs = result.getJs().get(0);
-		Assert.assertTrue(aggrJs.getValue().startsWith("uportal3_aggr2"));
+		Assert.assertTrue(aggrJs.getValue().startsWith("uportal3_2"));
 
 		File outputCss = new File(outputDirectory, aggrCss.getValue());
 		Assert.assertTrue(outputCss.exists());
@@ -97,37 +97,41 @@ public class ResourcesAggregatorImplTest {
 		ResourcesAggregatorImpl impl = new ResourcesAggregatorImpl();
 		Resources result = impl.aggregate(skinXml, outputDirectory);
 		
+		List<Css> cssList = result.getCss();
 		Assert.assertEquals(5, result.getCss().size());
 		// 1st element was aggregated
-		Assert.assertTrue(result.getCss().get(0).getValue().startsWith("../common/css/"));
-		Assert.assertTrue(result.getCss().get(0).getValue().contains("uportal3_aggr"));
+		Assert.assertTrue(new File(outputDirectory, cssList.get(0).getValue()).exists());
+		Assert.assertTrue(cssList.get(0).getValue().endsWith(".aggr.min.css"));
 		
-		// 2nd is conditional
-		Assert.assertTrue(result.getCss().get(1).isConditional());
-		Assert.assertEquals("condition!", result.getCss().get(1).getConditional());
+		// 2nd was aggregated, conditional
+		Assert.assertTrue(new File(outputDirectory, cssList.get(1).getValue()).exists());
+		Assert.assertTrue(cssList.get(1).isConditional());
+		Assert.assertEquals("condition!", cssList.get(1).getConditional());
+		Assert.assertTrue(cssList.get(1).getValue().endsWith(".aggr.min.css"));
 		
 		// 3rd and 4th are absolutes
 		Assert.assertTrue(result.getCss().get(2).isAbsolute());
-		Assert.assertEquals("/ResourceServingWebapp/rs/1.css", result.getCss().get(2).getValue());
-		Assert.assertTrue(result.getCss().get(3).isAbsolute());
-		Assert.assertEquals("/ResourceServingWebapp/rs/2.css", result.getCss().get(3).getValue());
+		Assert.assertEquals("/ResourceServingWebapp/rs/1.css", cssList.get(2).getValue());
+		Assert.assertTrue(cssList.get(3).isAbsolute());
+		Assert.assertEquals("/ResourceServingWebapp/rs/2.css", cssList.get(3).getValue());
 		
 		// 5th element was aggregated and has media set
-		Assert.assertTrue(result.getCss().get(4).getValue().startsWith("css/"));
-		Assert.assertTrue(result.getCss().get(4).getValue().contains("uportal3_aggr"));
-		Assert.assertEquals("alternate", result.getCss().get(4).getMedia());
+		Assert.assertTrue(new File(outputDirectory, cssList.get(4).getValue()).exists());
+		Assert.assertTrue(cssList.get(4).getValue().endsWith(".aggr.min.css"));
+		Assert.assertEquals("alternate", cssList.get(4).getMedia());
 		
-		Assert.assertEquals(4, result.getJs().size());
+		List<Js> jsList = result.getJs();
+		Assert.assertEquals(4, jsList.size());
 		// 1st aggregated
-		Assert.assertTrue(result.getJs().get(0).getValue().startsWith("../common/js/"));
-		Assert.assertTrue(result.getJs().get(0).getValue().contains("uportal3_aggr"));
+		Assert.assertTrue(new File(outputDirectory, jsList.get(0).getValue()).exists());
+		Assert.assertTrue(result.getJs().get(0).getValue().endsWith("aggr.min.js"));
 		// 2nd absolute
 		Assert.assertTrue(result.getJs().get(1).isAbsolute());
 		Assert.assertEquals("/universal.js", result.getJs().get(1).getValue());
-		// 3rd aggregated with conditional
-		Assert.assertTrue(result.getJs().get(2).getValue().startsWith("js/"));
-		Assert.assertTrue(result.getJs().get(2).getValue().contains("uportal3_aggr"));
-		// 4th is compressed
+		// 3rd aggregated
+		Assert.assertTrue(new File(outputDirectory, jsList.get(2).getValue()).exists());
+		Assert.assertTrue(result.getJs().get(2).getValue().endsWith("aggr.min.js"));
+		// 4th is already compressed
 		Assert.assertTrue(result.getJs().get(3).getValue().contains("js/c-compressed.js"));
 		Assert.assertTrue(result.getJs().get(3).isCompressed());
 	}
