@@ -43,9 +43,9 @@ import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 public class ResourcesAggregatorImpl implements IResourcesAggregator {
 
 	private static final Log LOG = LogFactory.getLog(ResourcesAggregatorImpl.class);
-	private final static String CSS = ".css";
-	private final static String JS = ".js";
-	protected final static String AGGREGATE_FILE_PREFIX = "uportal3_aggr";
+	private final static String CSS = ".aggr.min.css";
+	private final static String JS = ".aggr.min.js";
+	protected final static String AGGREGATE_FILE_PREFIX = "uportal3_";
 
 	private int cssLineBreakColumnNumber = 10000;
 	private int jsLineBreakColumnNumber = 10000;
@@ -236,8 +236,8 @@ public class ResourcesAggregatorImpl implements IResourcesAggregator {
 		aggregatedForm.getJs().addAll(jsResult);
 		
 		// dump aggregated form out to output directory
-		//StringBuilder aggregatedFormOutputFileName = new StringBuilder(resourcesXmlBaseName);
-		StringBuilder aggregatedFormOutputFileName = new StringBuilder(AGGREGATE_FILE_PREFIX);
+		StringBuilder aggregatedFormOutputFileName = new StringBuilder();
+		aggregatedFormOutputFileName.append("uportal3_aggr");
 		aggregatedFormOutputFileName.append(".").append(resourcesXmlBaseName);
 		aggregatedFormOutputFileName.append(".").append(FilenameUtils.getExtension(resourcesXml.getName()));
 		File aggregatedOutputFile = new File(outputBaseDirectory, aggregatedFormOutputFileName.toString());
