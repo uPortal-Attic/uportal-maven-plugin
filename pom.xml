@@ -87,7 +87,7 @@
 
 		<!-- Project Dependency Version Properties -->
 		<ant.version>1.7.1</ant.version>
-		<cernunnos.version>1.1.0</cernunnos.version>
+		<cernunnos.version>1.2.1</cernunnos.version>
 		<commons-logging.version>1.1.1</commons-logging.version>
 		<commons-logging-api.version>1.1</commons-logging-api.version>
 		<log4j.version>1.2.15</log4j.version>
