@@ -9,6 +9,7 @@ import java.io.OutputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
@@ -83,9 +84,9 @@ public class DeployWarMojo extends AbstractTomcatWarDeployerMojo {
             contextName = contextName.substring(1);
         }
         
-        Artifact artifact;
-        if (artifactClassifier == null) {
-            artifact = artifactFactory.createArtifact(artifactGroupId, artifactId, "default", artifactVersion, "war");
+        Artifact artifact = null;
+        if (StringUtils.isBlank(artifactClassifier)) {
+            artifact = artifactFactory.createBuildArtifact(artifactGroupId, artifactId, artifactVersion, "war");
         } else {
             artifact = artifactFactory.createArtifactWithClassifier(artifactGroupId, artifactId, artifactVersion, "war", artifactClassifier);
         }
