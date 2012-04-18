@@ -185,6 +185,16 @@
 
 	<build>
 		<plugins>
+            <plugin>
+                <groupId>com.mycila.maven-license-plugin</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+                <configuration>
+                    <aggregate>true</aggregate>
+                    <excludes>
+                        <exclude>.gitignore</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.0.2</version>
