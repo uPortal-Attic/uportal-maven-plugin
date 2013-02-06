@@ -1,0 +1,21 @@
+<lifecycles>
+    <lifecycle>
+        <id>db-import</id>
+        <phases>
+            <phase>
+                <id>package</id>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>exploded</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </phase>
+        </phases>
+    </lifecycle>
+</lifecycles>
+
+
+
+
