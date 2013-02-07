@@ -1,6 +1,6 @@
 <lifecycles>
     <lifecycle>
-        <id>db-import</id>
+        <id>db-import2</id>
         <phases>
             <phase>
                 <id>package</id>

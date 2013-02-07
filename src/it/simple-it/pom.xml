@@ -15,20 +15,41 @@
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>@project.groupId@</groupId>
-        <artifactId>@project.artifactId@</artifactId>
-        <version>@project.version@</version>
-        <executions>
-          <execution>
-            <id>touch</id>
-            <phase>integration-test</phase>
-            <goals>
-              <goal>checkFile</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+        <plugin>
+            <groupId>@project.groupId@</groupId>
+            <artifactId>@project.artifactId@</artifactId>
+            <version>@project.version@</version>
+            <extensions>true</extensions>
+            <!-- I don't think you need executions if default binding or invoking goal hits mojo -->
+            <executions>
+                <execution>
+                    <id>touch</id>
+                    <phase>integration-test</phase>
+                    <goals>
+                        <goal>dbimport</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.codehaus.gmaven</groupId>
+            <artifactId>gmaven-plugin</artifactId>
+            <version>1.5</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>execute</goal>
+                    </goals>
+                    <configuration>
+                        <source>
+                            log.info('Creating temporary file for testing...')
+                            def file = new File(project.basedir, 'test.txt').createNewFile();
+                        </source>
+                    </configuration>
+                    <phase>data-import</phase>
+                </execution>
+            </executions>
+        </plugin>
     </plugins>
   </build>
 </project>

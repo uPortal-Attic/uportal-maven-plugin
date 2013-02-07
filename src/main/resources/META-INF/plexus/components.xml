@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component-set>
+    <components>
+        <!-- 'uportalDb' lifecycle, without any binding since it is dependent on packaging -->
+        <component>
+            <role>org.apache.maven.lifecycle.Lifecycle</role>
+            <implementation>org.apache.maven.lifecycle.Lifecycle</implementation>
+            <role-hint>uportalDb</role-hint>
+            <configuration>
+                <id>uportalDb</id>
+                <!-- START SNIPPET: lifecycle -->
+                <phases>
+                    <phase>db-init</phase>
+                    <phase>data-import</phase>
+                    <phase>data-export</phase>
+                </phases>
+                <!-- END SNIPPET: lifecycle -->
+            </configuration>
+        </component>
+    </components>
+</component-set>
