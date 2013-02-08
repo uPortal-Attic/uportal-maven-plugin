@@ -1,17 +1,31 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.jasig.parent</groupId>
+        <artifactId>jasig-parent</artifactId>
+        <version>33</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
     <groupId>org.jasig.portal</groupId>
     <artifactId>uportalData-maven-plugin</artifactId>
     <version>1.0</version>
     <packaging>maven-plugin</packaging>
 
     <name>uportal Platform Data Maven Plugin</name>
-    <description>uPortal Platform Plugin to create phases to bind data import/export operations to</description>
+    <description>uPortal Platform Plugin to create custom phases to bind data import/export operations to</description>
+
+    <scm>
+        <connection>scm:git:git://github.com/Jasig/uportalData-maven-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:Jasig/uportalData-maven-plugin.git</developerConnection>
+        <url>https://github.com/Jasig/uportalData-maven-plugin</url>
+    </scm>
 
     <properties>
+        <project.build.sourceVersion>1.6</project.build.sourceVersion>
+        <project.build.targetVersion>1.6</project.build.targetVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -41,6 +55,48 @@
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.jasig.maven</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <configuration>
+                        <defaultMergePolicy>MERGE</defaultMergePolicy>
+                        <reportPlugins combine.children="append">
+                            <plugin>
+                                <artifactId>maven-plugin-plugin</artifactId>
+                                <version>2.9</version>
+                            </plugin>
+                        </reportPlugins>
+                    </configuration>
+                </plugin>
+                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.codehaus.mojo</groupId>
+                                        <artifactId>exec-maven-plugin</artifactId>
+                                        <versionRange>[1.2.1,)</versionRange>
+                                        <goals>
+                                            <goal>exec</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -127,6 +183,31 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.jasig.maven</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <configuration>
+                    <defaultMergePolicy>MERGE</defaultMergePolicy>
+                    <reportPlugins combine.children="append">
+                        <plugin>
+                            <artifactId>maven-plugin-plugin</artifactId>
+                            <version>2.9</version>
+                        </plugin>
+                    </reportPlugins>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>manual-site</id>
+            <distributionManagement>
+                <site>
+                    <id>developer.jasig</id>
+                    <url>${jasig-site-dist-base}/uportalData-maven-plugin/${project.version}</url>
+                </site>
+            </distributionManagement>
+        </profile>
+    </profiles>
 </project>
