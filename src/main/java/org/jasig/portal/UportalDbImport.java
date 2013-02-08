@@ -25,13 +25,15 @@ import org.apache.maven.plugin.MojoExecutionException;
 // FIXME I could not figure out how to automatically get an invocation of
 // mvn data-import
 // to automatically build the project up to the package phase.  I believe this is
-// because I could not get the mojo to get associated to the data-import phase.
+// because I could not get the mojo associated to the data-import phase.
 // From what I read the mojo's @phase annotation or the components.xml
 // default-phases element should tie them together.  Then I expect the mojo's
 // @execute would cause the dependency upon
 // the package phase in the default lifecycle.  If you invoked the mojo explicitely;
 // e.g. mvn org.jasig.portal:uportalData-maven-plugin:1.0:dbimport
-// the dependency upon package is respected.  For now users will just have to use
+// the dependency upon package is respected.
+//
+// For now users can use
 // mvn package data-import
 
 /**
