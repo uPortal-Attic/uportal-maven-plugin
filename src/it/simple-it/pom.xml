@@ -7,7 +7,7 @@
   <artifactId>simple-it</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <description>A simple IT verifying the basic use case.</description>
+  <description>A simple IT verifying invoking the pom with a custom phase will execute a plug-in bound to that phase.</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,17 +19,8 @@
             <groupId>@project.groupId@</groupId>
             <artifactId>@project.artifactId@</artifactId>
             <version>@project.version@</version>
+            <!-- extensions must be set to true to pick up the custom phases -->
             <extensions>true</extensions>
-            <!-- I don't think you need executions if default binding or invoking goal hits mojo -->
-            <executions>
-                <execution>
-                    <id>touch</id>
-                    <phase>integration-test</phase>
-                    <goals>
-                        <goal>dbimport</goal>
-                    </goals>
-                </execution>
-            </executions>
         </plugin>
         <plugin>
             <groupId>org.codehaus.gmaven</groupId>
@@ -37,16 +28,52 @@
             <version>1.5</version>
             <executions>
                 <execution>
+                    <id>db-init-test</id>
                     <goals>
                         <goal>execute</goal>
                     </goals>
+                    <!-- This plug-in is bound to the custom phase db-init. When the gmaven plugin is invoked
+                         by the plug-in's integration test executing this pom with the custom phase db-init,
+                         create a test file that the plug-in's integration test can verify was created. -->
+                    <phase>db-init</phase>
                     <configuration>
                         <source>
                             log.info('Creating temporary file for testing...')
-                            def file = new File(project.basedir, 'test.txt').createNewFile();
+                            def file = new File(project.basedir, 'db-init.txt').createNewFile();
                         </source>
                     </configuration>
+                </execution>
+                <execution>
+                    <id>data-import-test</id>
+                    <goals>
+                        <goal>execute</goal>
+                    </goals>
+                    <!-- This plug-in is bound to the custom phase data-import. When the gmaven plugin is invoked
+                         by the plug-in's integration test executing this pom with the custom phase data-import,
+                         create a test file that the plug-in's integration test can verify was created. -->
                     <phase>data-import</phase>
+                    <configuration>
+                        <source>
+                            log.info('Creating temporary file for testing...')
+                            def file = new File(project.basedir, 'data-import.txt').createNewFile();
+                        </source>
+                    </configuration>
+                </execution>
+                <execution>
+                    <id>data-export-test</id>
+                    <goals>
+                        <goal>execute</goal>
+                    </goals>
+                    <!-- This plug-in is bound to the custom phase data-export. When the gmaven plugin is invoked
+                         by the plug-in's integration test executing this pom with the custom phase data-export,
+                         create a test file that the plug-in's integration test can verify was created. -->
+                    <phase>data-export</phase>
+                    <configuration>
+                        <source>
+                            log.info('Creating temporary file for testing...')
+                            def file = new File(project.basedir, 'data-export.txt').createNewFile();
+                        </source>
+                    </configuration>
                 </execution>
             </executions>
         </plugin>

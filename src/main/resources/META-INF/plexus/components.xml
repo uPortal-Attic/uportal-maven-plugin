@@ -2,21 +2,59 @@
 
 <component-set>
     <components>
-        <!-- 'uportalDb' lifecycle, without any binding since it is dependent on packaging -->
         <component>
             <role>org.apache.maven.lifecycle.Lifecycle</role>
             <implementation>org.apache.maven.lifecycle.Lifecycle</implementation>
-            <role-hint>uportalDb</role-hint>
+            <role-hint>uPortalData-init</role-hint>
             <configuration>
-                <id>uportalDb</id>
-                <!-- START SNIPPET: lifecycle -->
+                <id>uPortalData-init</id>
                 <phases>
                     <phase>db-init</phase>
+                </phases>
+            </configuration>
+            <!-- FIXME Could not get the mojo to execute when the phase is invoked (e.g. mvn db-init).
+                 See note in uPortalDbMojo.java -->
+            <default-phases>
+                <db-init>
+                    org.jasig.portal:uportalData-maven-plugin:1.0:dbinit
+                </db-init>
+            </default-phases>
+        </component>
+        <component>
+            <role>org.apache.maven.lifecycle.Lifecycle</role>
+            <implementation>org.apache.maven.lifecycle.Lifecycle</implementation>
+            <role-hint>uPortalData-import</role-hint>
+            <configuration>
+                <id>uPortalData-import</id>
+                <phases>
                     <phase>data-import</phase>
+                </phases>
+            </configuration>
+            <!-- FIXME Could not get the mojo to execute when the phase is invoked (e.g. mvn data-import).
+                 See note in uPortalDbMojo.java -->
+            <default-phases>
+                <data-import>
+                    org.jasig.portal:uportalData-maven-plugin:1.0:dbimport
+                </data-import>
+            </default-phases>
+        </component>
+        <component>
+            <role>org.apache.maven.lifecycle.Lifecycle</role>
+            <implementation>org.apache.maven.lifecycle.Lifecycle</implementation>
+            <role-hint>uPortalData-export</role-hint>
+            <configuration>
+                <id>uPortalData-export</id>
+                <phases>
                     <phase>data-export</phase>
                 </phases>
-                <!-- END SNIPPET: lifecycle -->
             </configuration>
+            <!-- FIXME Could not get the mojo to execute when the phase is invoked (e.g. mvn data-export).
+                 See note in uPortalDbMojo.java -->
+            <default-phases>
+                <data-export>
+                    org.jasig.portal:uportalData-maven-plugin:1.0:dbexport
+                </data-export>
+            </default-phases>
         </component>
     </components>
 </component-set>

@@ -1,13 +1,13 @@
 <lifecycles>
     <lifecycle>
-        <id>db-import2</id>
+        <id>data-import</id>
         <phases>
             <phase>
                 <id>package</id>
                 <executions>
                     <execution>
                         <goals>
-                            <goal>exploded</goal>
+                            <goal>zip</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -15,7 +15,3 @@
         </phases>
     </lifecycle>
 </lifecycles>
-
-
-
-
