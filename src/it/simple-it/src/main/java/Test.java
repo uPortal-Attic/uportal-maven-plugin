@@ -26,6 +26,6 @@ import java.lang.System;
 public class Test
 {
     public static void main(String[] args) {
-        System.out.println("this class should have compiled to validate a data operation does a normal build");
+        System.out.println("this class should have compiled to validate a data operation does a normal build; e.g. package lifecycle executes");
     }
 }

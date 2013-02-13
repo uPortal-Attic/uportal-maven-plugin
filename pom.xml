@@ -9,7 +9,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.jasig.portal</groupId>
+    <groupId>org.jasig.maven</groupId>
     <artifactId>uportalData-maven-plugin</artifactId>
     <version>1.0</version>
     <packaging>maven-plugin</packaging>

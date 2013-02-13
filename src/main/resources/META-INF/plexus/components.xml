@@ -13,10 +13,10 @@
                 </phases>
             </configuration>
             <!-- FIXME Could not get the mojo to execute when the phase is invoked (e.g. mvn db-init).
-                 See note in uPortalDbMojo.java -->
+                 See note in uPortalDbImport.java -->
             <default-phases>
                 <db-init>
-                    org.jasig.portal:uportalData-maven-plugin:1.0:dbinit
+                    org.jasig.maven:uportalData-maven-plugin:1.0:dbinit
                 </db-init>
             </default-phases>
         </component>
@@ -31,10 +31,10 @@
                 </phases>
             </configuration>
             <!-- FIXME Could not get the mojo to execute when the phase is invoked (e.g. mvn data-import).
-                 See note in uPortalDbMojo.java -->
+                 See note in uPortalDbImport.java -->
             <default-phases>
                 <data-import>
-                    org.jasig.portal:uportalData-maven-plugin:1.0:dbimport
+                    org.jasig.maven:uportalData-maven-plugin:1.0:dbimport
                 </data-import>
             </default-phases>
         </component>
@@ -49,10 +49,10 @@
                 </phases>
             </configuration>
             <!-- FIXME Could not get the mojo to execute when the phase is invoked (e.g. mvn data-export).
-                 See note in uPortalDbMojo.java -->
+                 See note in uPortalDbImport.java -->
             <default-phases>
                 <data-export>
-                    org.jasig.portal:uportalData-maven-plugin:1.0:dbexport
+                    org.jasig.maven:uportalData-maven-plugin:1.0:dbexport
                 </data-export>
             </default-phases>
         </component>
