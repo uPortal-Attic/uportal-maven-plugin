@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.jasig.maven</groupId>
     <artifactId>uportalData-maven-plugin</artifactId>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>uportal Platform Data Maven Plugin</name>
@@ -22,6 +22,12 @@
         <developerConnection>scm:git:git@github.com:Jasig/uportalData-maven-plugin.git</developerConnection>
         <url>https://github.com/Jasig/uportalData-maven-plugin</url>
     </scm>
+
+    <!-- We don't have separate Jira project for this so use uportal. -->
+    <issueManagement>
+        <url>${jasig-issues-base}/UP</url>
+        <system>${jasig-issues-system}</system>
+    </issueManagement>
 
     <properties>
         <project.build.sourceVersion>1.6</project.build.sourceVersion>
