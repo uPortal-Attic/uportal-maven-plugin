@@ -9,15 +9,15 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.jasig.maven</groupId>
     <artifactId>uportalData-maven-plugin</artifactId>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>uportal Platform Data Maven Plugin</name>
     <description>uPortal Platform Plugin to create custom phases to bind data import/export operations to</description>
 
     <scm>
-        <connection>scm:git:git://github.com/Jasig/uportalDataPlugin.git</connection>
-        <developerConnection>scm:git:git@github.com:Jasig/uportalDataPlugin.git</developerConnection>
+        <connection>scm:git:git://github.com/Jasig/uPortalDataPlugin.git</connection>
+        <developerConnection>scm:git:git@github.com:Jasig/uPortalDataPlugin.git</developerConnection>
         <url>https://github.com/Jasig/uPortalDataPlugin</url>
     </scm>
 
