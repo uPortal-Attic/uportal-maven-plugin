@@ -18,7 +18,7 @@
     <scm>
         <connection>scm:git:git://github.com/Jasig/uportalDataPlugin.git</connection>
         <developerConnection>scm:git:git@github.com:Jasig/uportalDataPlugin.git</developerConnection>
-        <url>https://github.com/Jasig/uPortalDataPlugin.git</url>
+        <url>https://github.com/Jasig/uPortalDataPlugin</url>
     </scm>
 
     <!-- We don't have separate Jira project for this so use uportal. -->
