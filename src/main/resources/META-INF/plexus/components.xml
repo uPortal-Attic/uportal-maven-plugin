@@ -37,7 +37,7 @@
                  See note in uPortalDbImport.java -->
             <default-phases>
                 <db-init>
-                    org.jasig.maven:uportalData-maven-plugin:1.0:dbinit
+                    org.jasig.maven:uportaldata-maven-plugin:1.0:dbinit
                 </db-init>
             </default-phases>
         </component>
@@ -55,7 +55,7 @@
                  See note in uPortalDbImport.java -->
             <default-phases>
                 <data-import>
-                    org.jasig.maven:uportalData-maven-plugin:1.0:dbimport
+                    org.jasig.maven:uportaldata-maven-plugin:1.0:dbimport
                 </data-import>
             </default-phases>
         </component>
@@ -73,7 +73,7 @@
                  See note in uPortalDbImport.java -->
             <default-phases>
                 <data-export>
-                    org.jasig.maven:uportalData-maven-plugin:1.0:dbexport
+                    org.jasig.maven:uportaldata-maven-plugin:1.0:dbexport
                 </data-export>
             </default-phases>
         </component>

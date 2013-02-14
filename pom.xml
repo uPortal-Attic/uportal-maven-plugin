@@ -8,8 +8,8 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.jasig.maven</groupId>
-    <artifactId>uportalData-maven-plugin</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <artifactId>uportaldata-maven-plugin</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>uportal Platform Data Maven Plugin</name>
@@ -209,7 +209,7 @@
             <distributionManagement>
                 <site>
                     <id>developer.jasig</id>
-                    <url>${jasig-site-dist-base}/uportalData-maven-plugin/${project.version}</url>
+                    <url>${jasig-site-dist-base}/uportaldata-maven-plugin/${project.version}</url>
                 </site>
             </distributionManagement>
         </profile>
