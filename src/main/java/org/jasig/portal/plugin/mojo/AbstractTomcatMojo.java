@@ -39,6 +39,8 @@ public abstract class AbstractTomcatMojo extends AbstractMojo {
      * @required
      */
     private File catalinaBase;
+    
+    //TODO seperate out home vs base, look at uportal build for how home vs base are currently being used
 
 	public String getWebAppsDir() {
 		return this.webAppsDir;
