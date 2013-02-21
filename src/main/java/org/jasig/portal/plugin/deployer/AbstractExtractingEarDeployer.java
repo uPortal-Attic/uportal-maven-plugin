@@ -41,11 +41,9 @@ import javax.xml.xpath.XPathFactory;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.jasig.portal.plugin.deployer.DeployerConfig;
-import org.jasig.portal.plugin.deployer.WebModule;
-import org.jasig.portal.plugin.deployer.ClasspathEntityResolver;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.logging.Log;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -57,15 +55,19 @@ import org.xml.sax.SAXException;
  * @author Eric Dalquist
  * @version $Revision$
  */
-public abstract class AbstractEarDeployer<CONFIG extends DeployerConfig> {
+public abstract class AbstractExtractingEarDeployer implements EarDeployer {
     private static final String DESCRIPTOR_PATH        = "META-INF/application.xml";
     private static final String WEB_MODULE_XPATH       = "//application/module/web";
     private static final String WEB_URI_NODE_NAME      = "web-uri";
     private static final String CONTEXT_ROOT_NODE_NAME = "context-root";
 
-    protected final Log         logger                 = LogFactory.getLog(this.getClass());
-
-
+    @Requirement
+    private Log logger;
+    
+    protected final Log getLogger() {
+        return logger;
+    }
+    
     /**
      * Deployes an EAR to the container specified in the DeployerConfig. The EAR's
      * applicationContext.xml is parsed and the module/web entries are deployed using
@@ -73,9 +75,10 @@ public abstract class AbstractEarDeployer<CONFIG extends DeployerConfig> {
      * deployed using {@link #deployJar(JarEntry, JarFile, DeployerConfig)}.
      * 
      * @param deployerConfig
+     * @throws MojoFailureException 
      * @throws Exception
      */
-    public final void deployEar(CONFIG deployerConfig) throws IOException {
+    public final void deploy(DeployerConfig deployerConfig) throws MojoFailureException {
         final JarFile earFile = this.getEarFile(deployerConfig);
         final Document descriptorDom = this.getDescriptorDom(earFile);
         final NodeList webModules = this.getWebModules(descriptorDom);
@@ -107,7 +110,7 @@ public abstract class AbstractEarDeployer<CONFIG extends DeployerConfig> {
      * @param deployerConfig Deployer configuration, sub-classes will likely us a DeployerConfig sub-class to pass container specific information
      * @throws IOException If an IO related error occures while deploying the WAR.
      */
-    protected abstract void deployWar(WebModule webModule, JarFile earFile, CONFIG deployerConfig) throws IOException;
+    protected abstract void deployWar(WebModule webModule, JarFile earFile, DeployerConfig deployerConfig) throws MojoFailureException;
 
     /**
      * Sub-classes must implement this to deploy the specified JAR file from the EAR to the appropriate
@@ -118,7 +121,7 @@ public abstract class AbstractEarDeployer<CONFIG extends DeployerConfig> {
      * @param deployerConfig Deployer configuration, sub-classes will likely us a DeployerConfig sub-class to pass container specific information
      * @throws IOException If an IO related error occures while deploying the JAR.
      */
-    protected abstract void deployJar(JarEntry jarEntry, JarFile earFile, CONFIG deployerConfig) throws IOException;
+    protected abstract void deployJar(JarEntry jarEntry, JarFile earFile, DeployerConfig deployerConfig) throws MojoFailureException;
 
     /**
      * Gets the EAR from the configuration in the {@link DeployerConfig}.
@@ -127,9 +130,14 @@ public abstract class AbstractEarDeployer<CONFIG extends DeployerConfig> {
      * @return The JarFile for the EAR.
      * @throws IOException If there was a problem finding or opening the EAR.
      */
-    protected JarFile getEarFile(DeployerConfig deployerConfig) throws IOException {
-        final JarFile earFile = new JarFile(deployerConfig.getEarLocation());
-        return earFile;
+    protected JarFile getEarFile(DeployerConfig deployerConfig) throws MojoFailureException {
+        final File earLocation = deployerConfig.getEarLocation();
+        try {
+            return new JarFile(earLocation);
+        }
+        catch (IOException e) {
+            throw new MojoFailureException("Failed to open '" + earLocation + " as a JAR file", e);
+        }
     }
 
     /**
@@ -139,15 +147,17 @@ public abstract class AbstractEarDeployer<CONFIG extends DeployerConfig> {
      * @return The descriptor DOM for the EAR.
      * @throws IOException If there is any problem reading the descriptor from the EAR.
      */
-    protected Document getDescriptorDom(final JarFile earFile) throws IOException {
+    protected Document getDescriptorDom(final JarFile earFile) throws MojoFailureException {
         final ZipEntry descriptorEntry = earFile.getEntry(DESCRIPTOR_PATH);
         if (descriptorEntry == null) {
             throw new IllegalArgumentException("JarFile '" + earFile + "' does not contain a descriptor at '" + DESCRIPTOR_PATH + "'");
         }
         
-        final InputStream descriptorStream = earFile.getInputStream(descriptorEntry);
 
+        InputStream descriptorStream = null;
         try {
+            descriptorStream = earFile.getInputStream(descriptorEntry);
+            
             final DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
             
             final DocumentBuilder docBuilder;
@@ -159,7 +169,7 @@ public abstract class AbstractEarDeployer<CONFIG extends DeployerConfig> {
             }
             
             
-            docBuilder.setEntityResolver(new ClasspathEntityResolver());
+            docBuilder.setEntityResolver(new ClasspathEntityResolver(this.logger));
             
             final Document descriptorDom;
             try {
@@ -167,8 +177,11 @@ public abstract class AbstractEarDeployer<CONFIG extends DeployerConfig> {
                 return descriptorDom;
             }
             catch (SAXException e) {
-                throw new RuntimeException("Failed to parse descriptor '" + DESCRIPTOR_PATH + "' from EAR '" + earFile.getName() + "'", e);
+                throw new MojoFailureException("Failed to parse descriptor '" + DESCRIPTOR_PATH + "' from EAR '" + earFile.getName() + "'", e);
             }
+        }
+        catch (IOException e) {
+            throw new MojoFailureException("Failed to read descriptor '" + DESCRIPTOR_PATH + "' from EAR '" + earFile.getName() + "'", e);
         }
         finally {
             IOUtils.closeQuietly(descriptorStream);
@@ -263,6 +276,7 @@ public abstract class AbstractEarDeployer<CONFIG extends DeployerConfig> {
      * @param baseDir The directory to base the file in
      * @param fileName The name for the file
      * @return A new File object that has its parent directories and an existing file deleted. 
+     * @throws IOException 
      */
     protected File createSafeFile(final File baseDir, final String fileName) throws IOException {
         final File safeFile = new File(baseDir, fileName);
@@ -285,13 +299,14 @@ public abstract class AbstractEarDeployer<CONFIG extends DeployerConfig> {
      * @param destinationFile The File to write to, all parent directories should exist and no file should already exist at this location.
      * @throws IOException If the copying of data from the JarEntry to the File fails.
      */
-    protected void copyAndClose(JarEntry earEntry, JarFile earFile, File destinationFile) throws IOException {
+    protected void copyAndClose(JarEntry earEntry, JarFile earFile, File destinationFile) throws MojoFailureException {
         if (this.logger.isInfoEnabled()) {
             this.logger.info("Copying EAR entry '" + earFile.getName() + "!" + earEntry.getName() + "' to '" + destinationFile + "'");
         }
 
-        final InputStream jarEntryStream = earFile.getInputStream(earEntry);
+        InputStream jarEntryStream = null;
         try {
+            jarEntryStream = earFile.getInputStream(earEntry);
             final OutputStream jarOutStream = new FileOutputStream(destinationFile);
             try {
                 IOUtils.copy(jarEntryStream, jarOutStream);
@@ -299,6 +314,9 @@ public abstract class AbstractEarDeployer<CONFIG extends DeployerConfig> {
             finally {
                 IOUtils.closeQuietly(jarOutStream);
             }
+        }
+        catch (IOException e) {
+            throw new MojoFailureException("Failed to copy EAR entry '" + earEntry.getName() + "' out of '" + earFile.getName() + "' to '" + destinationFile + "'", e);
         }
         finally {
             IOUtils.closeQuietly(jarEntryStream);
@@ -315,7 +333,7 @@ public abstract class AbstractEarDeployer<CONFIG extends DeployerConfig> {
      * @param contextDir The directory to extract the JAR to.
      * @throws IOException If the extracting of data from the JarEntry fails.
      */
-    protected void extractWar(JarFile earFile, final JarEntry earEntry, final File contextDir) throws IOException {
+    protected void extractWar(JarFile earFile, final JarEntry earEntry, final File contextDir) throws MojoFailureException {
         if (this.logger.isInfoEnabled()) {
             this.logger.info("Extracting EAR entry '" + earFile.getName() + "!" + earEntry.getName() + "' to '" + contextDir + "'");
         }
@@ -325,11 +343,18 @@ public abstract class AbstractEarDeployer<CONFIG extends DeployerConfig> {
                 this.logger.debug("Creating context directory entry '" + contextDir + "'");
             }
 
-            FileUtils.forceMkdir(contextDir);
+            try {
+                FileUtils.forceMkdir(contextDir);
+            }
+            catch (IOException e) {
+                throw new MojoFailureException("Failed to create '" + contextDir + "' to extract '" + earEntry.getName() + "' out of '" + earFile.getName() + "' into", e);
+            }
         }
         
-        final JarInputStream warInputStream = new JarInputStream(earFile.getInputStream(earEntry));
+        JarInputStream warInputStream = null;
         try {
+            warInputStream = new JarInputStream(earFile.getInputStream(earEntry));
+            
             //TODO write manifest
             
             JarEntry warEntry;
@@ -359,6 +384,9 @@ public abstract class AbstractEarDeployer<CONFIG extends DeployerConfig> {
                     }
                 }
             }
+        }
+        catch (IOException e) {
+            throw new MojoFailureException("Failed to extract EAR entry '" + earEntry.getName() + "' out of '" + earFile.getName() + "' to '" + contextDir + "'", e);
         }
         finally {
             IOUtils.closeQuietly(warInputStream);

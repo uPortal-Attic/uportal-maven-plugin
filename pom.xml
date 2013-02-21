@@ -9,7 +9,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.jasig.portal</groupId>
-	<artifactId>maven-uportal-plugin</artifactId>
+	<artifactId>uportal-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
 
 	<name>uPortal Maven Plugin</name>
@@ -24,217 +24,53 @@
     </scm>
 
 	<properties>
-		<!-- The final name of the uPortal web-application -->
-		<uportal.docbase>uPortal</uportal.docbase>
-
 		<!-- Project Dependency Version Properties -->
-		<ant.version>1.7.1</ant.version>
-		<cernunnos.version>1.2.1</cernunnos.version>
-		<commons-logging.version>1.1.1</commons-logging.version>
-		<commons-logging-api.version>1.1</commons-logging-api.version>
-		<log4j.version>1.2.15</log4j.version>
-		<maven.version>2.0.9</maven.version>
-		<pluto.version>2.1.0-M2</pluto.version>
-		<uportal.version>3.1.0</uportal.version>
-
-		<jaxb-api.version>2.1</jaxb-api.version>
-		<jaxb-impl.version>2.1.11</jaxb-impl.version>
-		<commons-io.version>1.4</commons-io.version>
-		<junit.version>4.4</junit.version>
-		<yuicompressor.version>2.4.2</yuicompressor.version>
-		<commons-lang.version>2.4</commons-lang.version>
+        <project.build.sourceVersion>1.6</project.build.sourceVersion>
+        <project.build.targetVersion>1.6</project.build.targetVersion>
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>com.googlecode.cernunnos</groupId>
-			<artifactId>cernunnos</artifactId>
-			<version>${cernunnos.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring</artifactId>
-				</exclusion>
-				<exclusion>
-					<artifactId>js</artifactId>
-					<groupId>rhino</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>${commons-logging.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>logkit</groupId>
-					<artifactId>logkit</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>avalon-framework</groupId>
-					<artifactId>avalon-framework</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging-api</artifactId>
-			<version>${commons-logging-api.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${log4j.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.sun.jdmk</groupId>
-					<artifactId>jmxtools</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.sun.jmx</groupId>
-					<artifactId>jmxri</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>javax.jms</groupId>
-					<artifactId>jms</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>javax.mail</groupId>
-					<artifactId>mail</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-artifact</artifactId>
-			<version>${maven.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-project</artifactId>
-			<version>${maven.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-plugin-api</artifactId>
-			<version>${maven.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.ant</groupId>
-			<artifactId>ant</artifactId>
-			<version>${ant.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.portals.pluto</groupId>
-			<artifactId>pluto-ant-tasks</artifactId>
-			<version>${pluto.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-archiver</artifactId>
-			<version>2.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.plexus</groupId>
-			<artifactId>plexus-utils</artifactId>
-			<version>1.0.4</version>
-		</dependency>
-		<!--
-			as long as the target java version is 1.5, we will need to explicitly
-			mention JAXB api and impl
-		-->
-		<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
-			<version>${jaxb-api.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.xml.bind</groupId>
-			<artifactId>jaxb-impl</artifactId>
-			<version>${jaxb-impl.version}</version>
-		</dependency>
-		<!-- end jaxb dependencies for 1.5 target  -->
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>${commons-io.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>${commons-lang.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.yahoo.platform.yui</groupId>
-			<artifactId>yuicompressor</artifactId>
-			<version>${yuicompressor.version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>js</artifactId>
-					<groupId>rhino</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-compat</artifactId>
+            <version>3.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-archiver</artifactId>
+            <version>2.3</version>
+        </dependency>
 	</dependencies>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.jasig.maven</groupId>
-                    <artifactId>maven-site-plugin</artifactId>
-                    <configuration>
-                        <defaultMergePolicy>MERGE</defaultMergePolicy>
-                        <reportPlugins combine.children="append">
-                            <plugin>
-                                <artifactId>maven-plugin-plugin</artifactId>
-                                <version>2.9</version>
-                            </plugin>
-                        </reportPlugins>
-                    </configuration>
-                </plugin>
-                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.codehaus.mojo</groupId>
-                                        <artifactId>exec-maven-plugin</artifactId>
-                                        <versionRange>[1.2.1,)</versionRange>
-                                        <goals>
-                                            <goal>exec</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore />
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
                 <version>3.2</version>
                 <configuration>
-                    <goalPrefix>uportalData</goalPrefix>
-                    <skipErrorNoDescriptorsFound>true
-                    </skipErrorNoDescriptorsFound>
+                    <goalPrefix>uportal</goalPrefix>
+                    <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
                 </configuration>
                 <executions>
                     <execution>
@@ -311,19 +147,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.jasig.maven</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <configuration>
-                    <defaultMergePolicy>MERGE</defaultMergePolicy>
-                    <reportPlugins combine.children="append">
-                        <plugin>
-                            <artifactId>maven-plugin-plugin</artifactId>
-                            <version>2.9</version>
-                        </plugin>
-                    </reportPlugins>
-                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -19,94 +19,90 @@
 package org.jasig.portal.plugin.deployer;
 
 import java.io.File;
-
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
- * Base config object for the {@link AbstractEarDeployer}. Specifies where the EAR resides,
- * {@link AbstractEarDeployer} impls will likely extend this class to provide container specific
- * deployment configuration.
- * <br>
- * <br>
- * 
- * Properties:
- * <ul>
- *  <li>earLocation - The location of the EAR file to deploy.</li>
- *  <li>extractWars - If the WARs should be extracted when deployed.</li>
- *  <li>removeExistingDirectories - If extracted WAR directories exist should they be removed before deploying.</li>
- * </ul>
+ * Config object for the {@link EarDeployer}. Specifies where the EAR resides.
  *  
  * @author Eric Dalquist
- * @version $Revision$
  */
 public class DeployerConfig {
     private File earLocation;
-    private boolean extractWars = false;
-    private boolean removeExistingDirectories = false;
+    private String deployDestination;
+    private boolean extractWars = true;
+    private boolean removeExistingWebappDirectories = false;
+    private boolean cleanSharedDirectory = true;
+    private Map<String, String> deployerParameters = new LinkedHashMap<String, String>(0);
 
     public File getEarLocation() {
         return this.earLocation;
     }
+    /**
+     * @param earLocation EAR File to deploy
+     */
     public void setEarLocation(File earLocation) {
         this.earLocation = earLocation;
     }
+    
     public boolean isExtractWars() {
         return this.extractWars;
     }
+    /**
+     * @param extractWars If true WAR files will be extracted during deployment, defaults to true
+     */
     public void setExtractWars(boolean extractWars) {
         this.extractWars = extractWars;
     }
-    public boolean isRemoveExistingDirectories() {
-        return this.removeExistingDirectories;
+    
+    public String getDeployDestination() {
+        return deployDestination;
     }
-    public void setRemoveExistingDirectories(boolean removeExistingDirectories) {
-        this.removeExistingDirectories = removeExistingDirectories;
+    /**
+     * @param deployDestination Destination to deploy the EAR to
+     */
+    public void setDeployDestination(String deployDestination) {
+        this.deployDestination = deployDestination;
+    }
+    
+    public boolean isRemoveExistingWebappDirectories() {
+        return removeExistingWebappDirectories;
+    }
+    /**
+     * @param removeExistingWebappDirectories If conflicting webapp directories should be removed during deployment, defaults to true
+     */
+    public void setRemoveExistingWebappDirectories(boolean removeExistingWebappDirectories) {
+        this.removeExistingWebappDirectories = removeExistingWebappDirectories;
+    }
+    
+    public boolean isCleanSharedDirectory() {
+        return cleanSharedDirectory;
+    }
+    /**
+     * @param cleanSharedDirectory If the shared library directory should be purged before deployment, defaults to true
+     */
+    public void setCleanSharedDirectory(boolean cleanSharedDirectory) {
+        this.cleanSharedDirectory = cleanSharedDirectory;
+    }
+    
+    public Map<String, String> getDeployerParameters() {
+        return deployerParameters;
+    }
+    /**
+     * @param deployerParameters Parameters specific to the {@link EarDeployer} implementation
+     */
+    public void setDeployerParameters(Map<String, String> deployerParameters) {
+        this.deployerParameters = deployerParameters;
     }
     
     
-    /**
-     * @see java.lang.Object#equals(Object)
-     */
-    @Override
-    public boolean equals(final Object object) {
-        if (object == this) {
-            return true;
-        }
-        if (!(object instanceof DeployerConfig)) {
-            return false;
-        }
-        DeployerConfig rhs = (DeployerConfig)object;
-        return new EqualsBuilder()
-            .append(this.earLocation, rhs.earLocation)
-            .append(this.extractWars, rhs.extractWars)
-            .append(this.removeExistingDirectories, rhs.removeExistingDirectories)
-            .isEquals();
-    }
-
-    /**
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(-110713495, -1544877739)
-            .append(this.earLocation)
-            .append(this.extractWars)
-            .append(this.removeExistingDirectories)
-            .toHashCode();
-    }
-
-    /**
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-            .append("earLocation", this.earLocation)
-            .append("extractWars", this.extractWars)
-            .append("removeExistingDirectories", this.removeExistingDirectories)
-            .toString();
+        return "DeployerConfig [earLocation=" + earLocation
+                + ", deployDestination=" + deployDestination + ", extractWars="
+                + extractWars + ", removeExistingWebappDirectories="
+                + removeExistingWebappDirectories + ", cleanSharedDirectory="
+                + cleanSharedDirectory + ", deployerParameters="
+                + deployerParameters + "]";
     }
 }
