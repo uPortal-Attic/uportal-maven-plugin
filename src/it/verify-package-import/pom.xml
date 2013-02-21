@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.jasig.uportal.maven.it</groupId>
+  <artifactId>verify-package-import</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <description>A simple IT verifying invoking the pom with a custom phase will execute a plug-in bound to that phase.</description>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <build>
+    <plugins>
+        <plugin>
+            <groupId>@project.groupId@</groupId>
+            <artifactId>@project.artifactId@</artifactId>
+            <version>@project.version@</version>
+            <!-- extensions must be set to true to pick up the custom phases -->
+            <extensions>true</extensions>
+        </plugin>
+        <plugin>
+            <groupId>org.codehaus.gmaven</groupId>
+            <artifactId>gmaven-plugin</artifactId>
+            <version>1.5</version>
+            <executions>
+                <execution>
+                    <id>db-init-test</id>
+                    <goals>
+                        <goal>execute</goal>
+                    </goals>
+                    <!-- This plug-in is bound to the custom phase db-init. When the gmaven plugin is invoked
+                         by the plug-in's integration test executing this pom with the custom phase db-init,
+                         create a test file that the plug-in's integration test can verify was created. -->
+                    <phase>db-init</phase>
+                    <configuration>
+                        <source>
+                            log.info('Creating temporary file for init testing...')
+                            def file = new File(project.basedir, 'db-init.txt').createNewFile();
+                        </source>
+                    </configuration>
+                </execution>
+                <execution>
+                    <id>data-import-test</id>
+                    <goals>
+                        <goal>execute</goal>
+                    </goals>
+                    <!-- This plug-in is bound to the custom phase data-import. When the gmaven plugin is invoked
+                         by the plug-in's integration test executing this pom with the custom phase data-import,
+                         create a test file that the plug-in's integration test can verify was created. -->
+                    <phase>data-import</phase>
+                    <configuration>
+                        <source>
+                            log.info('Creating temporary file for import testing...')
+                            def file = new File(project.basedir, 'data-import.txt').createNewFile();
+                        </source>
+                    </configuration>
+                </execution>
+                <execution>
+                    <id>data-export-test</id>
+                    <goals>
+                        <goal>execute</goal>
+                    </goals>
+                    <!-- This plug-in is bound to the custom phase data-export. When the gmaven plugin is invoked
+                         by the plug-in's integration test executing this pom with the custom phase data-export,
+                         create a test file that the plug-in's integration test can verify was created. -->
+                    <phase>data-export</phase>
+                    <configuration>
+                        <source>
+                            log.info('Creating temporary file for export testing...')
+                            def file = new File(project.basedir, 'data-export.txt').createNewFile();
+                        </source>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+  </build>
+</project>

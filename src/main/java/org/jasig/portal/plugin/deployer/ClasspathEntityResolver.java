@@ -40,21 +40,16 @@ public class ClasspathEntityResolver implements EntityResolver {
         this.logger = logger;
     }
 
-    /* (non-Javadoc)
-     * @see org.xml.sax.EntityResolver#resolveEntity(java.lang.String, java.lang.String)
-     */
     public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
         final String entityName = getEntityName(systemId);
         final InputStream entityStream = getClass().getResourceAsStream(entityName);
         
-        if (this.logger.isDebugEnabled()) {
-            this.logger.debug((entityStream == null ? "Failed to resolve" : "Resolved") + " Entity for publicId: '" + publicId + "', systemId: '" + systemId + "'");
-        }
-        
+        this.logger.debug("Resolved Entity for publicId: '" + publicId + "', systemId: '" + systemId + "'");
         if (entityStream != null) {
             return new InputSource(entityStream);
         }
-        
+
+        this.logger.warn("Failed to resolve entity for publicId: '" + publicId + "', systemId: '" + systemId + "'");
         return null;
     }
 
