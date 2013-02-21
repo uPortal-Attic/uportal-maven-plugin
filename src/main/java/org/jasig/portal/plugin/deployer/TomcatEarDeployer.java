@@ -20,6 +20,7 @@ package org.jasig.portal.plugin.deployer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -42,15 +43,27 @@ import org.codehaus.plexus.component.annotations.Component;
  */
 @Component(role=EarDeployer.class, hint="tomcat")
 public class TomcatEarDeployer extends AbstractExtractingEarDeployer {
-    
+    private static final String WEB_APPS_DIR_PARAM = "webAppsDir";
+    private static final String SHARED_LIB_DIR_PARAM = "sharedLibDir";
+
     private File getWebAppsDir(DeployerConfig config) {
-        config.getDeployerParameters().get("webAppsDir");
-        //TODO
-        return null;
+        return getFileParam(config, WEB_APPS_DIR_PARAM, "webapps");
     }
     private File getSharedLibDir(DeployerConfig config) {
-        //TODO
-        return null;
+        return getFileParam(config, SHARED_LIB_DIR_PARAM, "shared/lib");
+    }
+    private File getFileParam(DeployerConfig config, String param, String defaultLocation) {
+        final Map<String, String> deployerParameters = config.getDeployerParameters();
+        String paramLocation = deployerParameters.get(param);
+        if (paramLocation == null) {
+            paramLocation = defaultLocation;
+        }
+        
+        if (paramLocation.startsWith("/")) {
+            return new File(paramLocation);
+        }
+        
+        return new File(config.getDeployDestination(), paramLocation);
     }
     
     /**

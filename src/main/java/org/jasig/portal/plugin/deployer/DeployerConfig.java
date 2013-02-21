@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public class DeployerConfig {
     private File earLocation;
-    private String deployDestination;
+    private File deployDestination;
     private boolean extractWars = true;
     private boolean removeExistingWebappDirectories = false;
     private boolean cleanSharedDirectory = true;
@@ -55,13 +55,13 @@ public class DeployerConfig {
         this.extractWars = extractWars;
     }
     
-    public String getDeployDestination() {
+    public File getDeployDestination() {
         return deployDestination;
     }
     /**
      * @param deployDestination Destination to deploy the EAR to
      */
-    public void setDeployDestination(String deployDestination) {
+    public void setDeployDestination(File deployDestination) {
         this.deployDestination = deployDestination;
     }
     

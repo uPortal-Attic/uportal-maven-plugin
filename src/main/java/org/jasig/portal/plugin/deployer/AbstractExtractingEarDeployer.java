@@ -64,6 +64,10 @@ public abstract class AbstractExtractingEarDeployer implements EarDeployer {
     @Requirement
     private Log logger;
     
+    protected void setLogger(Log logger) {
+        this.logger = logger;
+    }
+
     protected final Log getLogger() {
         return logger;
     }

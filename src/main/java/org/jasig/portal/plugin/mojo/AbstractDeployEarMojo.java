@@ -1,5 +1,6 @@
 package org.jasig.portal.plugin.mojo;
 
+import java.io.File;
 import java.util.Map;
 
 import org.apache.maven.plugin.AbstractMojo;
@@ -31,7 +32,7 @@ public abstract class AbstractDeployEarMojo extends AbstractMojo {
      * Destination for EAR deployment
      */
     @Parameter(required = true)
-    private String deployDestination;
+    private File deployDestination;
     
     /**
      * If the war files within the ear should be extracted during deploy
