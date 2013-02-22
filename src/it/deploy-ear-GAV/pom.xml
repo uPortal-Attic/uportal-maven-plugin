@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.jasig.uportal.maven.it</groupId>
-  <artifactId>deploy-ear-file</artifactId>
+  <artifactId>deploy-ear-GAV</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <description>A simple IT verifying ear file deployment.</description>

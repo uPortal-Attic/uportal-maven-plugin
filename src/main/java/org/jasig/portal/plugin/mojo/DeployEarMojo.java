@@ -25,6 +25,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.artifact.ProjectArtifactMetadata;
 import org.jasig.portal.plugin.deployer.DeployerConfig;
 import org.jasig.portal.plugin.deployer.EarDeployer;
 
@@ -32,6 +33,9 @@ import org.jasig.portal.plugin.deployer.EarDeployer;
 public class DeployEarMojo extends AbstractDeployEarMojo {
     @Parameter(defaultValue="${project.artifact}", required=true, readonly=true)
     private Artifact artifact;
+    
+    @Parameter(defaultValue="${project.file}", required=true, readonly=true)
+    private File pomFile;
 
     @Parameter(defaultValue="${project.packaging}", required=true, readonly=true)
     private String packaging;
@@ -42,10 +46,13 @@ public class DeployEarMojo extends AbstractDeployEarMojo {
         }
         
 	    final EarDeployer earDeployer = getEarDeployer();
+	    
+	    final ProjectArtifactMetadata metadata = new ProjectArtifactMetadata( artifact, pomFile );
+	    artifact.addMetadata(metadata);
 
 	    final File earFile = artifact.getFile();
 	    if (earFile == null) {
-	        throw new MojoExecutionException("No build artifact is configured");
+	        throw new MojoExecutionException("No build artifact is configured: " + artifact + "/" + artifact.getClass());
 	    }
 	    
 	    final DeployerConfig deployerConfig = getDeployerConfig();

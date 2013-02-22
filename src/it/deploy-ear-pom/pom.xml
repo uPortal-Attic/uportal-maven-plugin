@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.jasig.uportal.maven.it</groupId>
+  <artifactId>deploy-ear-pom</artifactId>
+  <version>1.0</version>
+  <packaging>ear</packaging>
+
+  <description>Test ear artifact deployment</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.jasig.uportal.maven.it</groupId>
+      <artifactId>shared</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jasig.uportal.maven.it</groupId>
+      <artifactId>WarDeployerTestPortlet1</artifactId>
+      <version>1.0.0</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.jasig.uportal.maven.it</groupId>
+      <artifactId>WarDeployerTestPortlet2</artifactId>
+      <version>2.3.12</version>
+      <type>war</type>
+    </dependency>
+  </dependencies>
+  
+  <build>
+    <plugins>
+        <plugin>
+            <groupId>@project.groupId@</groupId>
+            <artifactId>@project.artifactId@</artifactId>
+            <version>@project.version@</version>
+            <!-- extensions must be set to true to pick up the custom phases -->
+            <extensions>true</extensions>
+        </plugin>
+    </plugins>
+  </build>
+</project>
