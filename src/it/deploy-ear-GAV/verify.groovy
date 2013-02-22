@@ -17,6 +17,8 @@
  * under the License.
  */
 
+import org.codehaus.plexus.util.*;
+
 File testTomcat = new File( basedir, "target/tomcat" );
 
 // Verify shared/lib
@@ -26,3 +28,5 @@ assert new File(testTomcat, "shared/lib/shared.jar").isFile();
 assert new File(testTomcat, "webapps/WarDeployerTestPortlet1").isDirectory();
 assert new File(testTomcat, "webapps/WarDeployerTestPortlet2").isDirectory();
 
+File targetDir = new File( basedir, "target");
+FileUtils.deleteDirectory( targetDir );

@@ -18,7 +18,6 @@
  */
 
 // Looking for test file indicating plug-in associated to db-init did run
-import org.codehaus.plexus.util.*;
 
 assert ! new File( basedir, "db-init.txt" ).isFile()
 //assert !testFile.isFile()
@@ -31,6 +30,3 @@ assert ! new File( basedir, "data-export.txt" ).isFile()
 
 // Look for test file indicating default lifecycle ran and Test.java was compiled.
 assert new File( basedir, "target/classes/Test.class" ).isFile()
-
-File targetDir = new File( basedir, "target");
-FileUtils.deleteDirectory( targetDir );

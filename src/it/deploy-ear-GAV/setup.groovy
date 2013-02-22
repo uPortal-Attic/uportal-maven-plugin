@@ -17,12 +17,9 @@
  * under the License.
  */
 
-File testTomcat = new File( basedir, "target/tomcat" );
+File sourceFile = new File(basedir, "test.ear");
+File installedFile = new File(localRepositoryPath, "org/jasig/uportal/maven/it/test/1.2.3/test-1.2.3.ear");
 
-// Verify shared/lib
-assert new File(testTomcat, "shared/lib/shared.jar").isFile();
+org.codehaus.plexus.util.FileUtils.copyFile(sourceFile, installedFile);
 
-// Verify portlet's exist
-assert new File(testTomcat, "webapps/WarDeployerTestPortlet1").isDirectory();
-assert new File(testTomcat, "webapps/WarDeployerTestPortlet2").isDirectory();
-
+return true;
