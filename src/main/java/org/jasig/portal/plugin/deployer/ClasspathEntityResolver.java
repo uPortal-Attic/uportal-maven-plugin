@@ -21,7 +21,7 @@ package org.jasig.portal.plugin.deployer;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.maven.plugin.logging.Log;
+import org.codehaus.plexus.logging.Logger;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -34,9 +34,9 @@ import org.xml.sax.SAXException;
  * @version $Revision$
  */
 public class ClasspathEntityResolver implements EntityResolver {
-    protected final Log logger;
+    protected final Logger logger;
     
-    public ClasspathEntityResolver(Log logger) {
+    public ClasspathEntityResolver(Logger logger) {
         this.logger = logger;
     }
 

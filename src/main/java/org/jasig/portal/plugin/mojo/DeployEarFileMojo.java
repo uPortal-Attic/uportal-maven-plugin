@@ -84,8 +84,8 @@ public class DeployEarFileMojo extends AbstractDeployEarMojo {
             //Resolve artifact
             repositorySystem.resolve(artifactResolutionRequest);
             artifactFile = artifact.getFile();
-            deployerConfig.setEarLocation(artifactFile);
         }
+        deployerConfig.setEarLocation(artifactFile);
 
         //Deploy
         earDeployer.deploy(deployerConfig);

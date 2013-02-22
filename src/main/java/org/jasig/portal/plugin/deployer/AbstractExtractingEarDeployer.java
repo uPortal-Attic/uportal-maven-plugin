@@ -41,9 +41,9 @@ import javax.xml.xpath.XPathFactory;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugin.logging.Log;
-import org.codehaus.plexus.component.annotations.Requirement;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -55,23 +55,12 @@ import org.xml.sax.SAXException;
  * @author Eric Dalquist
  * @version $Revision$
  */
-public abstract class AbstractExtractingEarDeployer implements EarDeployer {
+public abstract class AbstractExtractingEarDeployer extends AbstractLogEnabled implements EarDeployer {
     private static final String DESCRIPTOR_PATH        = "META-INF/application.xml";
     private static final String WEB_MODULE_XPATH       = "//application/module/web";
     private static final String WEB_URI_NODE_NAME      = "web-uri";
     private static final String CONTEXT_ROOT_NODE_NAME = "context-root";
 
-    @Requirement
-    private Log logger;
-    
-    protected void setLogger(Log logger) {
-        this.logger = logger;
-    }
-
-    protected final Log getLogger() {
-        return logger;
-    }
-    
     /**
      * Deployes an EAR to the container specified in the DeployerConfig. The EAR's
      * applicationContext.xml is parsed and the module/web entries are deployed using
@@ -82,7 +71,7 @@ public abstract class AbstractExtractingEarDeployer implements EarDeployer {
      * @throws MojoFailureException 
      * @throws Exception
      */
-    public final void deploy(DeployerConfig deployerConfig) throws MojoFailureException {
+    public final void deploy(DeployerConfig deployerConfig) throws MojoExecutionException, MojoFailureException {
         final JarFile earFile = this.getEarFile(deployerConfig);
         final Document descriptorDom = this.getDescriptorDom(earFile);
         final NodeList webModules = this.getWebModules(descriptorDom);
@@ -134,8 +123,11 @@ public abstract class AbstractExtractingEarDeployer implements EarDeployer {
      * @return The JarFile for the EAR.
      * @throws IOException If there was a problem finding or opening the EAR.
      */
-    protected JarFile getEarFile(DeployerConfig deployerConfig) throws MojoFailureException {
+    protected JarFile getEarFile(DeployerConfig deployerConfig) throws MojoExecutionException, MojoFailureException {
         final File earLocation = deployerConfig.getEarLocation();
+        if (earLocation == null) {
+            throw new MojoExecutionException("No earLocation specified");
+        }
         try {
             return new JarFile(earLocation);
         }
@@ -173,7 +165,7 @@ public abstract class AbstractExtractingEarDeployer implements EarDeployer {
             }
             
             
-            docBuilder.setEntityResolver(new ClasspathEntityResolver(this.logger));
+            docBuilder.setEntityResolver(new ClasspathEntityResolver(this.getLogger()));
             
             final Document descriptorDom;
             try {
@@ -214,8 +206,8 @@ public abstract class AbstractExtractingEarDeployer implements EarDeployer {
         try {
             final NodeList nodes = (NodeList)xpathExpr.evaluate(descriptorDom, XPathConstants.NODESET);
 
-            if (this.logger.isDebugEnabled()) {
-                this.logger.debug("Found " + nodes.getLength() + " '" + WEB_MODULE_XPATH + "' nodes in descriptor.");
+            if (this.getLogger().isDebugEnabled()) {
+                this.getLogger().debug("Found " + nodes.getLength() + " '" + WEB_MODULE_XPATH + "' nodes in descriptor.");
             }
 
             return nodes;
@@ -266,8 +258,8 @@ public abstract class AbstractExtractingEarDeployer implements EarDeployer {
         webModule.setWebUri(webUri);
         webModule.setContextRoot(contextRoot);
 
-        if (this.logger.isDebugEnabled()) {
-            this.logger.debug("Found WebModule='" + webModule + "'");
+        if (this.getLogger().isDebugEnabled()) {
+            this.getLogger().debug("Found WebModule='" + webModule + "'");
         }
 
         return webModule;
@@ -304,8 +296,8 @@ public abstract class AbstractExtractingEarDeployer implements EarDeployer {
      * @throws IOException If the copying of data from the JarEntry to the File fails.
      */
     protected void copyAndClose(JarEntry earEntry, JarFile earFile, File destinationFile) throws MojoFailureException {
-        if (this.logger.isInfoEnabled()) {
-            this.logger.info("Copying EAR entry '" + earFile.getName() + "!" + earEntry.getName() + "' to '" + destinationFile + "'");
+        if (this.getLogger().isInfoEnabled()) {
+            this.getLogger().info("Copying EAR entry '" + earFile.getName() + "!" + earEntry.getName() + "' to '" + destinationFile + "'");
         }
 
         InputStream jarEntryStream = null;
@@ -338,13 +330,13 @@ public abstract class AbstractExtractingEarDeployer implements EarDeployer {
      * @throws IOException If the extracting of data from the JarEntry fails.
      */
     protected void extractWar(JarFile earFile, final JarEntry earEntry, final File contextDir) throws MojoFailureException {
-        if (this.logger.isInfoEnabled()) {
-            this.logger.info("Extracting EAR entry '" + earFile.getName() + "!" + earEntry.getName() + "' to '" + contextDir + "'");
+        if (this.getLogger().isInfoEnabled()) {
+            this.getLogger().info("Extracting EAR entry '" + earFile.getName() + "!" + earEntry.getName() + "' to '" + contextDir + "'");
         }
         
         if (!contextDir.exists()) {
-            if (this.logger.isDebugEnabled()) {
-                this.logger.debug("Creating context directory entry '" + contextDir + "'");
+            if (this.getLogger().isDebugEnabled()) {
+                this.getLogger().debug("Creating context directory entry '" + contextDir + "'");
             }
 
             try {
@@ -366,15 +358,15 @@ public abstract class AbstractExtractingEarDeployer implements EarDeployer {
                 final File warEntryFile = new File(contextDir, warEntry.getName());
                 
                 if (warEntry.isDirectory()) {
-                    if (this.logger.isDebugEnabled()) {
-                        this.logger.debug("Creating WAR directory entry '" + earEntry.getName() + "!" + warEntry.getName() + "' as '" + warEntryFile + "'");
+                    if (this.getLogger().isDebugEnabled()) {
+                        this.getLogger().debug("Creating WAR directory entry '" + earEntry.getName() + "!" + warEntry.getName() + "' as '" + warEntryFile + "'");
                     }
                     
                     FileUtils.forceMkdir(warEntryFile);
                 }
                 else {
-                    if (this.logger.isDebugEnabled()) {
-                        this.logger.debug("Extracting WAR entry '" + earEntry.getName() + "!" + warEntry.getName() + "' to '" + warEntryFile + "'");
+                    if (this.getLogger().isDebugEnabled()) {
+                        this.getLogger().debug("Extracting WAR entry '" + earEntry.getName() + "!" + warEntry.getName() + "' to '" + warEntryFile + "'");
                     }
                     
                     FileUtils.forceMkdir(warEntryFile.getParentFile());

@@ -8,7 +8,7 @@
     </parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.jasig.portal</groupId>
+	<groupId>org.jasig.portal.maven</groupId>
 	<artifactId>uportal-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
 
@@ -54,11 +54,17 @@
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
             <version>3.2</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-archiver</artifactId>
             <version>2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version>3.0.10</version>
         </dependency>
         <dependency>
           <groupId>junit</groupId>
@@ -79,6 +85,21 @@
                         <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
                     </systemPropertyVariables>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-component-metadata</artifactId>
+                <version>1.5.5</version>
+                <executions>
+                  <execution>
+                    <id>process-classes</id>
+                    <phase>process-classes</phase>
+                    <goals>
+                      <goal>generate-metadata</goal>
+                      <goal>merge-metadata</goal>
+                    </goals>
+                  </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

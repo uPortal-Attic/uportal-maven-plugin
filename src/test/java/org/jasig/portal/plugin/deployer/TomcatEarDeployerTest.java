@@ -6,6 +6,7 @@ import java.io.File;
 import java.net.URL;
 
 import org.apache.maven.plugin.logging.SystemStreamLog;
+import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -27,7 +28,7 @@ public class TomcatEarDeployerTest {
         
         final TomcatEarDeployer deployer = new TomcatEarDeployer();
         //TODO use logback hook instead of system.out
-        deployer.setLogger(new SystemStreamLog());
+        deployer.enableLogging(new ConsoleLogger());
         deployer.deploy(config);
             
         final File expectedSharedJar = new File(tomcatDest, "/shared/lib/shared.jar");

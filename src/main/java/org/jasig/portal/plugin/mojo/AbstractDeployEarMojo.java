@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.jasig.portal.plugin.deployer.DeployerConfig;
 import org.jasig.portal.plugin.deployer.EarDeployer;
 
@@ -19,7 +19,7 @@ public abstract class AbstractDeployEarMojo extends AbstractMojo {
     /**
      * Component to deploy ear files
      */
-    @Requirement(role = EarDeployer.class)
+    @Component(role = EarDeployer.class)
     private Map<String, EarDeployer> earDeployers;
     
     /**
@@ -31,25 +31,25 @@ public abstract class AbstractDeployEarMojo extends AbstractMojo {
     /**
      * Destination for EAR deployment
      */
-    @Parameter(required = true)
+    @Parameter(property="deployDestination", required = true)
     private File deployDestination;
     
     /**
      * If the war files within the ear should be extracted during deploy
      */
-    @Parameter(defaultValue = "true")
+    @Parameter(property="extractWars", defaultValue = "true")
     private boolean extractWars = true;
     
     /**
      * If true remove conflicting webapp directories before deploying instead of deploying on top of them 
      */
-    @Parameter(defaultValue = "true")
+    @Parameter(property="removeExistingWebappDirectories", defaultValue = "true")
     private boolean removeExistingWebappDirectories = false;
     
     /**
      * If the shared library directory should have all existing files removed before deploying 
      */
-    @Parameter(defaultValue = "true")
+    @Parameter(property="cleanSharedDirectory", defaultValue = "true")
     private boolean cleanSharedDirectory = true;
     
     /**

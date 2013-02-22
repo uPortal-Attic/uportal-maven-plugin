@@ -92,7 +92,12 @@ public class DeployerConfig {
      * @param deployerParameters Parameters specific to the {@link EarDeployer} implementation
      */
     public void setDeployerParameters(Map<String, String> deployerParameters) {
-        this.deployerParameters = deployerParameters;
+        if (deployerParameters == null) {
+            this.deployerParameters = new LinkedHashMap<String, String>(0);
+        }
+        else {
+            this.deployerParameters = deployerParameters;
+        }
     }
     
     
