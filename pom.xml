@@ -14,7 +14,7 @@
 
     <name>uPortal Maven Plugin</name>
     <description>The root project definition for the uPortal project.</description>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <url>${jasig-site-base}/maven-uportal-plugin/${project.version}</url>
 
     <scm>
