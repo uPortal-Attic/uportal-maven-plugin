@@ -1,4 +1,4 @@
-uportaldata-maven-plugin
+uportal-maven-plugin
 =================
 
 Maven Plugin to add several custom lifecycle phases to Maven for uPortal database
