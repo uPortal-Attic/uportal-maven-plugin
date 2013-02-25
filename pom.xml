@@ -7,29 +7,29 @@
         <version>34</version>
     </parent>
 
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.jasig.portal.maven</groupId>
-	<artifactId>uportal-maven-plugin</artifactId>
-	<packaging>maven-plugin</packaging>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.jasig.portal.maven</groupId>
+    <artifactId>uportal-maven-plugin</artifactId>
+    <packaging>maven-plugin</packaging>
 
-	<name>uPortal Maven Plugin</name>
-	<description>The root project definition for the uPortal project.</description>
-	<version>1.0.0-SNAPSHOT</version>
-	<url>${jasig-site-base}/maven-uportal-plugin/${project.version}</url>
+    <name>uPortal Maven Plugin</name>
+    <description>The root project definition for the uPortal project.</description>
+    <version>1.0.0-SNAPSHOT</version>
+    <url>${jasig-site-base}/maven-uportal-plugin/${project.version}</url>
 
     <scm>
-        <connection>scm:git:git://github.com/Jasig/maven-uportal-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:Jasig/maven-uportal-plugin.git</developerConnection>
-        <url>https://github.com/Jasig/maven-uportal-plugin</url>
+        <connection>scm:git:git://github.com/Jasig/uportal-maven-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:Jasig/uportal-maven-plugin.git</developerConnection>
+        <url>https://github.com/Jasig/uportal-maven-plugin</url>
     </scm>
 
-	<properties>
-		<!-- Project Dependency Version Properties -->
+    <properties>
+        <!-- Project Dependency Version Properties -->
         <project.build.sourceVersion>1.6</project.build.sourceVersion>
         <project.build.targetVersion>1.6</project.build.targetVersion>
-	</properties>
+    </properties>
 
-	<dependencies>
+    <dependencies>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -72,7 +72,7 @@
           <version>4.11</version>
           <scope>test</scope>
         </dependency>
-	</dependencies>
+    </dependencies>
 
     <build>
         <plugins>
