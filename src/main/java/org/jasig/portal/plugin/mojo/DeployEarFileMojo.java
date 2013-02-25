@@ -34,7 +34,8 @@ import org.jasig.portal.plugin.deployer.DeployerConfig;
 import org.jasig.portal.plugin.deployer.EarDeployer;
 
 /**
- * Deploys an EAR file resolved by specifying the GAV or file
+ * Deploys an EAR file either specified specifically by the file parameter or
+ * resolved via a GAV
  * 
  * @author Eric Dalquist
  */

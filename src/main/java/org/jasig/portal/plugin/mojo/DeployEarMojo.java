@@ -29,6 +29,12 @@ import org.apache.maven.project.artifact.ProjectArtifactMetadata;
 import org.jasig.portal.plugin.deployer.DeployerConfig;
 import org.jasig.portal.plugin.deployer.EarDeployer;
 
+/**
+ * Deploy the EAR artifact from the current project. Only works when used in a 
+ * project that specifies the "ear" packaging type.
+ * 
+ * @author Eric Dalquist
+ */
 @Mojo(name="deploy-ear")
 public class DeployEarMojo extends AbstractDeployEarMojo {
     @Parameter(defaultValue="${project.artifact}", required=true, readonly=true)

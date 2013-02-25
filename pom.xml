@@ -154,6 +154,19 @@
                   </execution>
                 </executions>
             </plugin>
+              <plugin>
+                  <groupId>org.jasig.maven</groupId>
+                  <artifactId>maven-site-plugin</artifactId>
+                  <configuration>
+                      <defaultMergePolicy>MERGE</defaultMergePolicy>
+                      <reportPlugins combine.children="append">
+                          <plugin>
+                              <artifactId>maven-plugin-plugin</artifactId>
+                              <version>3.2</version>
+                          </plugin>
+                      </reportPlugins>
+                  </configuration>
+              </plugin>
         </plugins>
     </build>
 
@@ -163,7 +176,7 @@
             <distributionManagement>
                 <site>
                     <id>developer.jasig</id>
-                    <url>${jasig-site-dist-base}/uportaldata-maven-plugin/${project.version}</url>
+                    <url>${jasig-site-dist-base}/uportal-maven-plugin/${project.version}</url>
                 </site>
             </distributionManagement>
         </profile>
