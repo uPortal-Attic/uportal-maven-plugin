@@ -4,7 +4,7 @@ Adds goals and lifecycle phases used by uPortal's build and deploy process.
 
 ## Goals
 
-TODO link to maven site
+[Maven Site](http://developer.jasig.org/projects/uportal-maven-plugin/1.0.0/plugin-info.html)
 
 ## Lifecycle Phases
 
