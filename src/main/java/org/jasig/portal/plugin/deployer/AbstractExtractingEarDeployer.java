@@ -27,6 +27,7 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
+import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -57,6 +58,7 @@ import org.xml.sax.SAXException;
  */
 public abstract class AbstractExtractingEarDeployer extends AbstractLogEnabled implements EarDeployer {
     private static final String DESCRIPTOR_PATH        = "META-INF/application.xml";
+    private static final String MANIFEST_PATH          = "META-INF/MANIFEST.MF";
     private static final String WEB_MODULE_XPATH       = "//application/module/web";
     private static final String WEB_URI_NODE_NAME      = "web-uri";
     private static final String CONTEXT_ROOT_NODE_NAME = "context-root";
@@ -350,9 +352,30 @@ public abstract class AbstractExtractingEarDeployer extends AbstractLogEnabled i
         JarInputStream warInputStream = null;
         try {
             warInputStream = new JarInputStream(earFile.getInputStream(earEntry));
-            
-            //TODO write manifest
-            
+
+            // Write out the MANIFEST.MF file to the target directory
+            Manifest manifest = warInputStream.getManifest();
+            if (manifest != null) {
+                FileOutputStream manifestFileOutputStream = null;
+                try {
+                    final File manifestFile = new File(contextDir, MANIFEST_PATH);
+                    manifestFile.getParentFile().mkdirs();
+                    manifestFileOutputStream = new FileOutputStream(manifestFile);
+                    manifest.write(manifestFileOutputStream);
+                } catch (Exception e) {
+                    this.getLogger().error("Failed to copy the MANIFEST.MF file for ear entry '" + earEntry.getName() + "' out of '" + earFile.getName() + "'", e);
+                    throw new MojoFailureException("Failed to copy the MANIFEST.MF file for ear entry '" + earEntry.getName() + "' out of '" + earFile.getName() + "'", e);
+                } finally {
+                    try {
+                        if (manifestFileOutputStream != null) {
+                            manifestFileOutputStream.close();
+                        }
+                    } catch (Exception e) {
+                        this.getLogger().warn("Error closing the OutputStream for MANIFEST.MF in warEntry:  " + earEntry.getName());
+                    }
+                }
+            }
+
             JarEntry warEntry;
             while ((warEntry = warInputStream.getNextJarEntry()) != null) {
                 final File warEntryFile = new File(contextDir, warEntry.getName());
